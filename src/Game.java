@@ -4,16 +4,36 @@ public class Game {
     static int size;
     private static int [][]board;
     public static void main(String[]args){
-        size = difficultyLevel();
-        Generator generator = new Generator(size);
+
+        whatToDo();
+
 
         giveBoard();
-
         for(int i=0; i<size; i++){
             for(int j=0; j<size; j++){
                 System.out.print(board[i][j] + " ");
             }
             System.out.println();
+        }
+    }
+
+    static void whatToDo(){
+        System.out.println("Co chcesz zrobić?");
+        System.out.println("1. Wygenerować planszę do gry");
+        System.out.println("2. Zagrać na własnej planszy");
+
+        Scanner scanner = new Scanner(System.in);
+        int temp = scanner.nextInt();
+
+        switch(temp){
+            case 1:
+                size = difficultyLevel();
+                Generator generator = new Generator(size);
+                break;
+            case 2:
+                CSVFileReader reader = new CSVFileReader();
+                break;
+            default: System.out.println("Źle wybrany numer");
         }
     }
 
@@ -24,10 +44,10 @@ public class Game {
         System.out.println("3. Trudny");
 
         Scanner scanner = new Scanner(System.in);
-        int temp = scanner.nextInt();
+        int temporary = scanner.nextInt();
         scanner.close();
 
-        switch(temp){
+        switch(temporary){
             case 1: return 5;
             case 2: return 7;
             case 3: return 10;
