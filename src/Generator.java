@@ -71,7 +71,7 @@ public class Generator {
                     break;
             }
 
-            if(tempBoard[currentX][currentY]==0){
+            if((tempBoard[currentX][currentY]==0) && (!isItSquare(tempBoard, currentX, currentY))){
                 counter++;
                 tempBoard[currentX][currentY]=1;
             }
@@ -79,6 +79,30 @@ public class Generator {
 
 
         return tempBoard;
+    }
+
+    boolean isItSquare(int [][]tempBoard, int x, int y){
+        if (x!=0 && y!=0){
+            if((tempBoard[x-1][y] == 1) && (tempBoard[x-1][y-1] == 1) && (tempBoard[x][y-1] == 1)){
+                return true;
+            }
+        }
+        if (x!=0 && y!=size-1){
+            if((tempBoard[x-1][y] == 1) && (tempBoard[x-1][y+1] == 1) && (tempBoard[x][y+1] == 1)){
+                return true;
+            }
+        }
+        if (x!=size-1 && y!=size-1){
+            if((tempBoard[x+1][y] == 1) && (tempBoard[x+1][y+1] == 1) && (tempBoard[x][y+1] == 1)){
+                return true;
+            }
+        }
+        if (x!=size-1 && y!=0){
+            if((tempBoard[x+1][y] == 1) && (tempBoard[x+1][y-1] == 1) && (tempBoard[x][y-1] == 1)){
+                return true;
+            }
+        }
+        return false;
     }
 
     public static int [][]getBoard(){
