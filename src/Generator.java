@@ -4,23 +4,23 @@ public class Generator {
     private int x;
     private int y;
     private int size;
-    private int [][]board;
+    private static int [][]board;
 
     Generator(int size){
         this.size=size;
         x = generateNumber(size);
         y = generateNumber(size);
 
-        System.out.println(x);
-        System.out.println(y);
+        //System.out.println(x);
+        //System.out.println(y);
 
         board=generateBoard(size);
-        for(int i=0; i<size; i++){
+        /*for(int i=0; i<size; i++){
             for(int j=0; j<size; j++){
                 System.out.print(board[i][j] + " ");
             }
             System.out.println();
-        }
+        }*/
 
     }
 
@@ -79,5 +79,9 @@ public class Generator {
 
 
         return tempBoard;
+    }
+
+    public static int [][]getBoard(){
+        return board;
     }
 }
