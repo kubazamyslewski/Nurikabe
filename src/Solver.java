@@ -1,6 +1,7 @@
 import java.security.KeyPair;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Scanner;
 
 public class Solver {
     int board[][];
@@ -9,7 +10,7 @@ public class Solver {
     numerki to numerki
     0 to białe pole
      */
-    Boolean IsCorrect(int board[][])
+    boolean IsCorrect(int board[][])
     {
         int n= board.length, m=board[0].length;
         int sumofwhite=0, sumofblack=0;
@@ -93,9 +94,7 @@ public class Solver {
 
             }
         }
-
-
-
+        return true;
     }
 
     class Punkt {
@@ -106,6 +105,11 @@ public class Solver {
             this.second = second;
         }
 
+
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
 
     }
 }
