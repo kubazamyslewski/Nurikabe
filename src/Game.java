@@ -6,15 +6,20 @@ public class Game {
     public static void main(String[]args){
 
         whatToDo();
+        //size = 5;
+        //Generator generator = new Generator(size);
+        //board = generator.generateBoard(size);
+        giveBoard(size);
 
 
-        giveBoard();
         for(int i=0; i<size; i++){
             for(int j=0; j<size; j++){
                 System.out.print(board[i][j] + " ");
             }
             System.out.println();
         }
+
+        //startGame(board, size);
     }
 
     static void whatToDo(){
@@ -28,7 +33,6 @@ public class Game {
         switch(temp){
             case 1:
                 size = difficultyLevel();
-                Generator generator = new Generator(size);
                 break;
             case 2:
                 CSVFileReader reader = new CSVFileReader();
@@ -56,7 +60,10 @@ public class Game {
         return 0;
     }
 
-    static void giveBoard(){
-        board = Generator.getBoard();
+    static void giveBoard(int size){
+        Generator generator = new Generator(size);
+        board = generator.generateBoard(size);
     }
+
+
 }
