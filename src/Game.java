@@ -3,6 +3,8 @@ import java.util.Scanner;
 public class Game {
     static int size;
     private static int [][]board;
+
+    private static int[][] playableBoard;
     public static void main(String[]args){
 
         whatToDo();
@@ -12,14 +14,8 @@ public class Game {
         giveBoard(size);
 
 
-        for(int i=0; i<size; i++){
-            for(int j=0; j<size; j++){
-                System.out.print(board[i][j] + " ");
-            }
-            System.out.println();
-        }
 
-        //startGame(board, size);
+
     }
 
     static void whatToDo(){
@@ -61,8 +57,11 @@ public class Game {
     }
 
     static void giveBoard(int size){
-        Generator generator = new Generator(size);
+        Generator generator = new Generator();
         board = generator.generateBoard(size);
+
+        playableBoard = generator.makeBoardToPlay(board);
+
     }
 
 

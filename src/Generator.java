@@ -1,3 +1,4 @@
+
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Stack;
@@ -7,24 +8,24 @@ public class Generator {
     private int y;
     private int size;
     private int [][]board;
+    private int [][] boardToPlay;
 
-    Generator(int size){
-        this.size=size;
-        x = generateNumber(size);
-        y = generateNumber(size);
-
-        //System.out.println(x);
-        //System.out.println(y);
-
-        board=generateBoard(size);
-        /*for(int i=0; i<size; i++){
-            for(int j=0; j<size; j++){
-                System.out.print(board[i][j] + " ");
-            }
-            System.out.println();
-        }*/
-
-    }
+//    Generator(int size){
+//        this.size=size;
+//        x = generateNumber(size);
+//        y = generateNumber(size);
+//
+//        //System.out.println(x);
+//        //System.out.println(y);
+//
+//        //board=generateBoard(size);
+//        board = new int[size][size];
+//
+//        boardToPlay = new int[size][size];
+//
+//
+//
+//    }
 
     int generateNumber(int s){
         Random random = new Random();
@@ -41,21 +42,21 @@ public class Generator {
         }
 
         Random random = new Random();
-
+        int currentX = random.nextInt(size);
+        int currentY = random.nextInt(size);
         int counter = 1;
-        tempBoard[x][y] = 1;
-        int currentX = x;
-        int currentY = y;
+        tempBoard[currentX][currentY] = -1;
+
 
         Stack<ArrayList<Integer>> checkpointDirections = new Stack<>();
         Stack<Integer> checkpointPlace = new Stack<>();
-        ArrayList<Integer> directions = new ArrayList<>(4);
+        ArrayList<Integer> directions;
 
-        while(counter<0.6*size*size){
+        while(counter<0.7*size*size){
             int direction = random.nextInt(4);
-            if (isInbounds(currentX, currentY) && !isItSquare(tempBoard,currentX,currentY)) {
+            if (isInbounds(tempBoard, currentX, currentY) && !isItSquare(tempBoard,currentX,currentY)) {
                 if (tempBoard[currentX][currentY] == 0) {
-                    tempBoard[currentX][currentY] = 1;
+                    tempBoard[currentX][currentY] = -1;
                     counter++;
                 }
             }
@@ -95,38 +96,59 @@ public class Generator {
                     currentY--;
                     break;
             }
-
-//            if((tempBoard[currentX][currentY]==0) && (!isItSquare(tempBoard, currentX, currentY))){
-//                counter++;
-//                tempBoard[currentX][currentY]=1;
-//            }
         }
+        return tempBoard;
+    }
+    int[][] makeBoardToPlay(int[][] board){
+        int n = board.length;
+        int m = board[0].length;
+        int iteration = 0;
+        Cell current;
+        int[][] tempBoard = new int[n][m];
+        ArrayList<NumberCell> numberCells = new ArrayList<>();
+        ArrayList<Cell> cells = new ArrayList<>();
 
+        AnalyzeMap analyzeBoard = new AnalyzeMap();
+        cells = (analyzeBoard.findWhiteLakes(board));
 
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if(!cells.isEmpty()){
+                    current=cells.getFirst();
+                    if(current.getR() == i && current.getC()==j){
+                        tempBoard[i][j] = current.getSize();
+                        cells.removeFirst();
+                    }
+
+                }
+
+            }
+        }
         return tempBoard;
     }
 
     boolean isItSquare(int [][]tempBoard, int x, int y){
-        if (!isInbounds(x, y)) {
+        int size = tempBoard.length;
+        if (!isInbounds(tempBoard,x, y)) {
             return true;
         }
         if (x!=0 && y!=0){
-            if((tempBoard[x-1][y] == 1) && (tempBoard[x-1][y-1] == 1) && (tempBoard[x][y-1] == 1)){
+            if((tempBoard[x-1][y] == -1) && (tempBoard[x-1][y-1] == -1) && (tempBoard[x][y-1] == -1)){
                 return true;
             }
         }
         if (x!=0 && y!=size-1){
-            if((tempBoard[x-1][y] == 1) && (tempBoard[x-1][y+1] == 1) && (tempBoard[x][y+1] == 1)){
+            if((tempBoard[x-1][y] == -1) && (tempBoard[x-1][y+1] == -1) && (tempBoard[x][y+1] == -1)){
                 return true;
             }
         }
         if (x!=size-1 && y!=size-1){
-            if((tempBoard[x+1][y] == 1) && (tempBoard[x+1][y+1] == 1) && (tempBoard[x][y+1] == 1)){
+            if((tempBoard[x+1][y] == -1) && (tempBoard[x+1][y+1] ==- 1) && (tempBoard[x][y+1] == -1)){
                 return true;
             }
         }
         if (x!=size-1 && y!=0){
-            if((tempBoard[x+1][y] == 1) && (tempBoard[x+1][y-1] == 1) && (tempBoard[x][y-1] == 1)){
+            if((tempBoard[x+1][y] == -1) && (tempBoard[x+1][y-1] == -1) && (tempBoard[x][y-1] == -1)){
                 return true;
             }
         }
@@ -165,8 +187,8 @@ public class Generator {
         return possibleDirections;
     }
 
-    boolean isInbounds(int r, int c) {
-        if (r < 0 || r >= size || c < 0 || c >= size) {
+    boolean isInbounds(int[][] board, int r, int c) {
+        if (r < 0 || r >= board.length || c < 0 || c >= board[0].length) {
             return false;
         }
         return true;
