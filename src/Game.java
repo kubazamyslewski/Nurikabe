@@ -26,7 +26,7 @@ public class Game {
             case 2:
                 CSVFileReader reader = new CSVFileReader("src/ExampleFile.csv", ",");
                 board=intSwapper(reader.toString());
-                //reader.writeCSVFile("src/ExampleFile.csv",",");
+                //reader.writeCSVFile("src/ExampleFile.csv",", ");
                 GameInterface GUIi = new GameInterface(board);
                 break;
 
