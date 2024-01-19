@@ -1,8 +1,129 @@
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class GameInterface {
+public class GameInterface extends JFrame {
 
-    static int selectDifficulty(){
+    private  final int SIZE;  // Rozmiar planszy
+    private JButton[][] buttons;  // Tablica przycisków reprezentujących komórki planszy
+    private int[][] intBoard;
+
+    public GameInterface(int[][] intBoard) {
+        //Generator generator = new Generator();
+        this.intBoard = intBoard;
+        this.SIZE = intBoard.length;
+        // Konfiguracja głównego okna JFrame
+        setTitle("Gra Nurikabe");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new GridLayout(SIZE, SIZE));
+        setResizable(false);
+
+        // Inicjalizacja tablicy przycisków
+        buttons = new JButton[SIZE][SIZE];
+
+        // Tworzenie przycisków i dodawanie ich do JFrame
+        initializeButtons();
+
+        // Pakowanie i wyświetlanie JFrame
+        pack();
+        setLocationRelativeTo(null);
+        setVisible(true);
+    }
+
+
+    private void initializeButtons() {
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                JButton button = new JButton();
+                button.setPreferredSize(new Dimension(50, 50));
+                button.addActionListener(new CellClickListener(i, j));
+
+                buttons[i][j] = button;
+
+
+                if (intBoard[i][j] >= 0) {
+                    updateButtonIcon(i, j);
+                }
+
+                add(button);
+
+            }
+        }
+    }
+
+    private class CellClickListener implements ActionListener {
+        private int row;
+        private int col;
+
+        public CellClickListener(int row, int col) {
+            this.row = row;
+            this.col = col;
+
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // Zmiana wartości na planszy po kliknięciu
+            intBoard[row][col] = -1 - intBoard[row][col]; // 0 na -1, -1 na 0
+            updateButtonIcon(row, col);
+        }
+
+    }
+
+    private void updateButtonIcon(int row, int col) {
+        int value = intBoard[row][col];
+        if (value == -1){
+            // Obsługa zdarzenia kliknięcia przycisku (możesz dostosować tę część)
+            String imagePath = "resources/" + "zamalowane" + ".jpg";  // Zakładamy, że obrazy mają nazwy image0.jpg, image1.jpg, itd.
+            ImageIcon originalIcon = new ImageIcon(getClass().getResource(imagePath));
+            Image originalImage = originalIcon.getImage();
+
+            // Skalowanie obrazu
+            int targetSize = 50;  // Docelowy rozmiar przycisku
+            Image scaledImage = originalImage.getScaledInstance(targetSize, targetSize, Image.SCALE_SMOOTH);
+
+            // Utworzenie nowego ImageIcon ze skalowanym obrazem
+            ImageIcon scaledIcon = new ImageIcon(scaledImage);
+
+            buttons[row][col].setIcon(scaledIcon);
+        }
+        if (value == 0){
+            String imagePath = "resources/" + "puste" + ".jpg";  // Zakładamy, że obrazy mają nazwy image0.jpg, image1.jpg, itd.
+            ImageIcon originalIcon = new ImageIcon(getClass().getResource(imagePath));
+            Image originalImage = originalIcon.getImage();
+
+            // Skalowanie obrazu
+            int targetSize = 50;  // Docelowy rozmiar przycisku
+            Image scaledImage = originalImage.getScaledInstance(targetSize, targetSize, Image.SCALE_SMOOTH);
+
+            // Utworzenie nowego ImageIcon ze skalowanym obrazem
+            ImageIcon scaledIcon = new ImageIcon(scaledImage);
+
+            buttons[row][col].setIcon(scaledIcon);
+        }
+        if (value > 0) {
+            //String imagePath = "resources/" + value + ".jpg";
+            String imagePath = "resources/" + value + ".jpg";  // Zakładamy, że obrazy mają nazwy image0.jpg, image1.jpg, itd.
+            ImageIcon originalIcon = new ImageIcon(getClass().getResource(imagePath));
+            Image originalImage = originalIcon.getImage();
+
+            // Skalowanie obrazu
+            int targetSize = 50;  // Docelowy rozmiar przycisku
+            Image scaledImage = originalImage.getScaledInstance(targetSize, targetSize, Image.SCALE_SMOOTH);
+
+            // Utworzenie nowego ImageIcon ze skalowanym obrazem
+            ImageIcon scaledIcon = new ImageIcon(scaledImage);
+
+            buttons[row][col].setIcon(scaledIcon);
+        }
+
+    }
+
+
+
+
+    static int selectDifficulty() {
         Object[] options = {"Trudny", "Średni", "Łatwy"};
 
         // Wyświetlanie okna dialogowego z trzema opcjami
@@ -34,7 +155,7 @@ public class GameInterface {
         return level;
     }
 
-    static int whichBoard(){
+    static int whichBoard() {
         Object[] options = {"Wygeneruj planszę", "Wczytaj planszę"};
 
         // Wyświetlanie okna dialogowego z trzema opcjami

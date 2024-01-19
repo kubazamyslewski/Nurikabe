@@ -7,20 +7,15 @@ public class Game {
         GameInterface gi = new GameInterface();
 
         whatToDo();
-        //size = 5;
-        //Generator generator = new Generator(size);
-        //board = generator.generateBoard(size);
-        giveBoard(size);
 
 
+        //giveBoard();
         for(int i=0; i<size; i++){
             for(int j=0; j<size; j++){
                 System.out.print(board[i][j] + " ");
             }
             System.out.println();
         }
-
-        //startGame(board, size);
     }
 
     static void whatToDo(){
@@ -35,10 +30,18 @@ public class Game {
         switch(GameInterface.whichBoard()){
             case 1:
                 size = difficultyLevel();
+                Generator generator = new Generator();
+                board = generator.makeBoardToPlay(generator.generateBoard(size));
+                GameInterface GUI = new GameInterface(board);
+                //giveBoard();
                 break;
             case 2:
-                CSVFileReader reader = new CSVFileReader();
+                CSVFileReader reader = new CSVFileReader("src/ExampleFile.csv", ",");
+                System.out.println(reader.toString());
+                reader.writeCSVFile("src/ExampleFile.csv",",");
+                //trzy ostatnie linijki to jest test czy wczytuje plus zapis koncowy (pewnie do wywalenia kiedyś)
                 break;
+
             default: System.out.println("Źle wybrany numer");
         }
     }
@@ -63,10 +66,10 @@ public class Game {
         return 0;
     }
 
-    static void giveBoard(int size){
-        Generator generator = new Generator(size);
-        board = generator.generateBoard(size);
+    static void giveBoard(){
+        Generator generator = new Generator();
+        int[][] playableBoard = generator.makeBoardToPlay(generator.generateBoard(size));
+        board = playableBoard;
     }
-
 
 }
