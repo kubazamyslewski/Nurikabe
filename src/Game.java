@@ -4,7 +4,7 @@ public class Game {
     static int size;
     private static int [][]board;
     public static void main(String[]args){
-        //GameInterface gi = new GameInterface();
+        GameInterface gi = new GameInterface();
 
         whatToDo();
 
