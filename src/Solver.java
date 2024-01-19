@@ -56,31 +56,34 @@ public class Solver {
         return boardToSolve;
     }
 
-
-    int[][] findBestBoard(ArrayList<NurikabeBoard> boards) {
+    //int[][] findBestBoard(ArrayList<NurikabeBoard> boards) {
+    int[][] findBestBoard(ArrayList<int[][]> boards) {
         int[][] bestNeighbour;
-        int[][] possibleBest = boards.get(0).getBoard();
+        int[][] possibleBest = boards.get(0);//.getBoard();
         int currentBestSumState = sumState(findBoardState(possibleBest));
         int possibleBestSumState;
         int bestBoardIndex = 0;
         for (int i = 1; i < boards.size(); i++) {
-            possibleBestSumState = sumState(findBoardState(boards.get(i).getBoard()));
+            //possibleBestSumState = sumState(findBoardState(boards.get(i).getBoard()));
+            possibleBestSumState = sumState(findBoardState(boards.get(i)));
             if (possibleBestSumState < currentBestSumState) {
                 currentBestSumState = possibleBestSumState;
                 bestBoardIndex = i;
             }
         }
 
-        return boards.get(bestBoardIndex).getBoard();
+        return boards.get(bestBoardIndex);
     }
 
 
-    public ArrayList<NurikabeBoard> findNeighbourBoards(int[][] board) {
+    // public ArrayList<NurikabeBoard> findNeighbourBoards(int[][] board) {
+    public ArrayList<int[][]> findNeighbourBoards(int[][] board) {
         //Random random = new Random();
         int n = board.length;
         int m = board[0].length;
         ArrayList<int[][]> neighbourBoards = new ArrayList<>();
-        ArrayList<NurikabeBoard> tempNurikabeboard = new ArrayList<>();
+        //ArrayList<NurikabeBoard> tempNurikabeboard = new ArrayList<>();
+
         ArrayList<Pair> blackCells;
         ArrayList<Pair> blackCellsFromBoard = new ArrayList<>();
         ArrayList<Pair> whiteCellsFromBoard = new ArrayList<>();
@@ -112,7 +115,7 @@ public class Solver {
             c--;
         }
 
-        NurikabeBoard nurikabeBoard = new NurikabeBoard(board, blackCellsFromBoard);
+        //NurikabeBoard nurikabeBoard = new NurikabeBoard(board, blackCellsFromBoard);
 
         Pair blackCell;
 
@@ -136,14 +139,14 @@ public class Solver {
                         tempBoard[r + i][c + j] = 0;
                         blackCells.remove(blackCell);
                         neighbourBoards.add(tempBoard);
-                        tempNurikabeboard.add(new NurikabeBoard(tempBoard, blackCells));
+                        //tempNurikabeboard.add(new NurikabeBoard(tempBoard, blackCells));
 
                     } else if (board[r + i][c + j] == 0) {
                         blackCells.add(blackCell);
                         //whiteCells.remove(whiteCell);
                         tempBoard[r + i][c + j] = -1;
                         neighbourBoards.add(tempBoard);
-                        tempNurikabeboard.add(new NurikabeBoard(tempBoard, blackCells));
+                        //tempNurikabeboard.add(new NurikabeBoard(tempBoard, blackCells));
                     }
 
                 }
@@ -155,19 +158,20 @@ public class Solver {
                         tempBoard[rWhite + i][cWhite + j] = 0;
                         blackCells.remove(blackCell);
                         neighbourBoards.add(tempBoard);
-                        tempNurikabeboard.add(new NurikabeBoard(tempBoard, blackCells));
+                        //tempNurikabeboard.add(new NurikabeBoard(tempBoard, blackCells));
 
                     } else if (board[rWhite + i][cWhite + j] == 0) {
                         blackCells.add(blackCell);
                         tempBoard[rWhite + i][cWhite + j] = -1;
                         neighbourBoards.add(tempBoard);
-                        tempNurikabeboard.add(new NurikabeBoard(tempBoard, blackCells));
+                        //tempNurikabeboard.add(new NurikabeBoard(tempBoard, blackCells));
                     }
 
                 }
             }
         }
-        return tempNurikabeboard;
+        return neighbourBoards;
+        //return tempNurikabeboard;
     }
 
 

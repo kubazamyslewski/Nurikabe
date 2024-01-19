@@ -1,18 +1,18 @@
-
-
 import javax.swing.*;
-        import java.awt.*;
-        import java.awt.event.ActionEvent;
-        import java.awt.event.ActionListener;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class GameInterface extends JFrame {
 
-    private static final int SIZE = 10;  // Rozmiar planszy
+    private  final int SIZE;  // Rozmiar planszy
     private JButton[][] buttons;  // Tablica przycisków reprezentujących komórki planszy
     private int[][] intBoard;
-    public GameInterface(int[][] intBoard) {
-        this.intBoard = intBoard;
 
+    public GameInterface(int[][] intBoard) {
+        //Generator generator = new Generator();
+        this.intBoard = intBoard;
+        this.SIZE = intBoard.length;
         // Konfiguracja głównego okna JFrame
         setTitle("Gra Nurikabe");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -31,6 +31,7 @@ public class GameInterface extends JFrame {
         setVisible(true);
     }
 
+
     private void initializeButtons() {
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
@@ -40,13 +41,13 @@ public class GameInterface extends JFrame {
 
                 buttons[i][j] = button;
 
-                if(intBoard[i][j]>0){
-                    //button.setText(Integer.toString(intBoard[i][j]));
+
+                if (intBoard[i][j] >= 0) {
                     updateButtonIcon(i, j);
                 }
 
-
                 add(button);
+
             }
         }
     }
@@ -58,21 +59,23 @@ public class GameInterface extends JFrame {
         public CellClickListener(int row, int col) {
             this.row = row;
             this.col = col;
+
         }
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            // Obsługa zdarzenia kliknięcia przycisku (możesz dostosować tę część)
-            JButton clickedButton = (JButton) e.getSource();
-            // Przykład: Zmiana tekstu przycisku po kliknięciu
-            clickedButton.setText("X");
+            // Zmiana wartości na planszy po kliknięciu
+            intBoard[row][col] = -1 - intBoard[row][col]; // 0 na -1, -1 na 0
+            updateButtonIcon(row, col);
         }
+
     }
 
     private void updateButtonIcon(int row, int col) {
         int value = intBoard[row][col];
-        if (value >= 0) {
-            String imagePath = "resources/1.jpg";  // Zakładamy, że obrazy mają nazwy image0.jpg, image1.jpg, itd.
+        if (value == -1){
+            // Obsługa zdarzenia kliknięcia przycisku (możesz dostosować tę część)
+            String imagePath = "resources/" + "zamalowane" + ".jpg";  // Zakładamy, że obrazy mają nazwy image0.jpg, image1.jpg, itd.
             ImageIcon originalIcon = new ImageIcon(getClass().getResource(imagePath));
             Image originalImage = originalIcon.getImage();
 
@@ -85,14 +88,100 @@ public class GameInterface extends JFrame {
 
             buttons[row][col].setIcon(scaledIcon);
         }
+        if (value == 0){
+            String imagePath = "resources/" + "puste" + ".jpg";  // Zakładamy, że obrazy mają nazwy image0.jpg, image1.jpg, itd.
+            ImageIcon originalIcon = new ImageIcon(getClass().getResource(imagePath));
+            Image originalImage = originalIcon.getImage();
+
+            // Skalowanie obrazu
+            int targetSize = 50;  // Docelowy rozmiar przycisku
+            Image scaledImage = originalImage.getScaledInstance(targetSize, targetSize, Image.SCALE_SMOOTH);
+
+            // Utworzenie nowego ImageIcon ze skalowanym obrazem
+            ImageIcon scaledIcon = new ImageIcon(scaledImage);
+
+            buttons[row][col].setIcon(scaledIcon);
+        }
+        if (value > 0) {
+            //String imagePath = "resources/" + value + ".jpg";
+            String imagePath = "resources/" + value + ".jpg";  // Zakładamy, że obrazy mają nazwy image0.jpg, image1.jpg, itd.
+            ImageIcon originalIcon = new ImageIcon(getClass().getResource(imagePath));
+            Image originalImage = originalIcon.getImage();
+
+            // Skalowanie obrazu
+            int targetSize = 50;  // Docelowy rozmiar przycisku
+            Image scaledImage = originalImage.getScaledInstance(targetSize, targetSize, Image.SCALE_SMOOTH);
+
+            // Utworzenie nowego ImageIcon ze skalowanym obrazem
+            ImageIcon scaledIcon = new ImageIcon(scaledImage);
+
+            buttons[row][col].setIcon(scaledIcon);
+        }
+
     }
 
-    public static void main(String[] args) {
 
-        Generator generator = new Generator();
-        int[][] generated;
-        generated = generator.generateBoard(10);
-        int[][] playable = generator.makeBoardToPlay(generated);
-        SwingUtilities.invokeLater(() -> new GameInterface(playable));
+
+
+    static int selectDifficulty() {
+        Object[] options = {"Trudny", "Średni", "Łatwy"};
+
+        // Wyświetlanie okna dialogowego z trzema opcjami
+        int selectedOption = JOptionPane.showOptionDialog(
+                null,
+                "Wybierz jedną z opcji:",
+                "Okno z Opcjami",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.INFORMATION_MESSAGE,
+                null,
+                options,
+                options[0]
+        );
+
+        int level = 0;
+        // Obsługa wybranej opcji
+        if (selectedOption == 0) {
+            System.out.println("Wybrano poziom trudny");
+            level = 3;
+        } else if (selectedOption == 1) {
+            System.out.println("Wybrano poziom średni");
+            level = 2;
+        } else if (selectedOption == 2) {
+            System.out.println("Wybrano poziom łatwy");
+            level = 1;
+        } else {
+            System.out.println("Nie wybrano żadnej opcji");
+        }
+        return level;
     }
+
+    static int whichBoard() {
+        Object[] options = {"Wygeneruj planszę", "Wczytaj planszę"};
+
+        // Wyświetlanie okna dialogowego z trzema opcjami
+        int selectedOption = JOptionPane.showOptionDialog(
+                null,
+                "Wybierz jedną z opcji:",
+                "Okno z Opcjami",
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.INFORMATION_MESSAGE,
+                null,
+                options,
+                options[0]
+        );
+
+        int option = 0;
+        // Obsługa wybranej opcji
+        if (selectedOption == 0) {
+            System.out.println("Generuję planszę");
+            option = 1;
+        } else if (selectedOption == 1) {
+            System.out.println("Wczytuję planszę");
+            option = 2;
+        } else {
+            System.out.println("Nie wybrano żadnej opcji");
+        }
+        return option;
+    }
+
 }
