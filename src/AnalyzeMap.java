@@ -1,33 +1,24 @@
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
 public class AnalyzeMap {
 
-
     //bfs z porownaniem ==
     private int bfs(int[][] arr, int r, int c, int land) {
-        if (r < 0 || r >= arr.length || c < 0 || c >= arr[0].length) { //|| arr[r][c] != land
+        if (r < 0 || r >= arr.length || c < 0 || c >= arr[0].length) {
             return 0;
         }
-
         int islandSize = 1;
         Queue<int[]> q = new LinkedList<>();
         q.add(new int[]{r, c});
         int n = arr.length;
         int m = arr[0].length;
-
-
         while (!q.isEmpty()) {
-
             int[] a = q.remove();
             int i = a[0];
             int j = a[1];
-            arr[i][j] = -2; // Mark the cell as visited
-
-
+            arr[i][j] = -2;
             if (j + 1 < m && arr[i][j + 1] == land) {
                 arr[i][j + 1] = -2;
                 q.add(new int[]{i, j + 1});
@@ -101,7 +92,7 @@ public class AnalyzeMap {
 
     //bfs nie zmienia tablicy && >= land
     private int bfsFindNumberIslands(int[][] arr, int r, int c, int land) {
-        if (r < 0 || r >= arr.length || c < 0 || c >= arr[0].length || arr[r][c] < land) { //|| arr[r][c] != land
+        if (r < 0 || r >= arr.length || c < 0 || c >= arr[0].length || arr[r][c] < land) {
             return 0;
         }
 
@@ -114,36 +105,30 @@ public class AnalyzeMap {
 
 
         while (!q.isEmpty()) {
-            //int[] a = q.remove();
             int[] a = q.poll();
             int i = a[0];
             int j = a[1];
             visited[i][j] = true;
-            //arr[i][j] = -2; // Mark the cell as visited
 
             if (j + 1 < m && arr[i][j + 1] >= land && !visited[i][j + 1]) {
-                //arr[i][j + 1] = -2;
                 visited[i][j + 1] = true;
                 q.offer(new int[]{i, j + 1});
                 islandSize++;
             }
 
             if (j - 1 >= 0 && arr[i][j - 1] >= land && !visited[i][j - 1]) {
-                //arr[i][j - 1] = -2;
                 visited[i][j - 1] = true;
                 q.offer(new int[]{i, j - 1});
                 islandSize++;
             }
 
             if (i + 1 < n && arr[i + 1][j] >= land && !visited[i + 1][j]) {
-                //arr[i + 1][j] = -2;
                 visited[i + 1][j] = true;
                 q.offer(new int[]{i + 1, j});
                 islandSize++;
             }
 
             if (i - 1 >= 0 && arr[i - 1][j] >= land && !visited[i - 1][j]) {
-                //arr[i - 1][j] = -2;
                 visited[i - 1][j] = true;
                 q.offer(new int[]{i - 1, j});
                 islandSize++;
@@ -155,7 +140,7 @@ public class AnalyzeMap {
 
     //bfs liczy ilsoc polaczonych cyfr >=land
     private int bfsCountConnectedNumbers(int[][] arr, int r, int c, int land) {
-        if (r < 0 || r >= arr.length || c < 0 || c >= arr[0].length || arr[r][c] < land) { //|| arr[r][c] != land
+        if (r < 0 || r >= arr.length || c < 0 || c >= arr[0].length || arr[r][c] < land) {
             return 0;
         }
 
@@ -168,15 +153,12 @@ public class AnalyzeMap {
 
 
         while (!q.isEmpty()) {
-            //int[] a = q.remove();
             int[] a = q.poll();
             int i = a[0];
             int j = a[1];
             visited[i][j] = true;
-            //arr[i][j] = -2; // Mark the cell as visited
 
             if (j + 1 < m && arr[i][j + 1] >= land && !visited[i][j + 1]) {
-                //arr[i][j + 1] = -2;
                 visited[i][j + 1] = true;
                 q.offer(new int[]{i, j + 1});
 
@@ -186,7 +168,6 @@ public class AnalyzeMap {
             }
 
             if (j - 1 >= 0 && arr[i][j - 1] >= land && !visited[i][j - 1]) {
-                //arr[i][j - 1] = -2;
                 visited[i][j - 1] = true;
                 q.offer(new int[]{i, j - 1});
 
@@ -196,7 +177,6 @@ public class AnalyzeMap {
             }
 
             if (i + 1 < n && arr[i + 1][j] >= land && !visited[i + 1][j]) {
-                //arr[i + 1][j] = -2;
                 visited[i + 1][j] = true;
                 q.offer(new int[]{i + 1, j});
 
@@ -206,7 +186,6 @@ public class AnalyzeMap {
             }
 
             if (i - 1 >= 0 && arr[i - 1][j] >= land && !visited[i - 1][j]) {
-                //arr[i - 1][j] = -2;
                 visited[i - 1][j] = true;
                 q.offer(new int[]{i - 1, j});
 
@@ -276,16 +255,12 @@ public class AnalyzeMap {
         int ans = 0;
         int n = board.length;
         int m = board[0].length;
-        ArrayList<Integer> whiteLakesSizes = new ArrayList<>();
-
         int[][] tempBoard = new int[n][m];
-
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
                 tempBoard[i][j] = board[i][j];
             }
         }
-
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
                 if (tempBoard[i][j] >= 0) {
@@ -296,7 +271,6 @@ public class AnalyzeMap {
         }
         return ans;
     }
-
 
     //bfs ze zmiana tablicy szukanie 0
     //generator tego uzywa
@@ -324,7 +298,6 @@ public class AnalyzeMap {
         return whiteCells;
     }
 
-
     public int countBlackSquares(int[][] board) {
         int ans = 0;
         int n = board.length;
@@ -342,7 +315,6 @@ public class AnalyzeMap {
         return ans;
     }
 
-
     public boolean has2x2Cube(int[][] tempBoard, int r, int c) {
         if (r + 1 < tempBoard.length && c + 1 < tempBoard.length) {
             if (tempBoard[r][c] == -1 && tempBoard[r][c + 1] == -1 && tempBoard[r + 1][c + 1] == -1 && tempBoard[r + 1][c] == -1) {
@@ -352,44 +324,14 @@ public class AnalyzeMap {
         return false;
     }
 
-
-//
-//    //bfs ze zmiana tablicy
-//    public ArrayList<Integer> countIslandSizes(int[][] board, int land) {
-//        int ans = 0;
-//        int n = board.length;
-//        int m = board[0].length;
-//        int[][] tempBoard = new int[n][m];
-//        ArrayList<Integer> islandSizes = new ArrayList<>();
-//
-//        for (int i = 0; i < n; i++) {
-//            for (int j = 0; j < m; j++) {
-//                tempBoard[i][j] = board[i][j];
-//            }
-//        }
-//
-//        for (int i = 0; i < n; i++) {
-//            for (int j = 0; j < m; j++) {
-//                if (tempBoard[i][j] == land) {
-//                    ans++;
-//                    islandSizes.add(bfs(tempBoard, i, j, land));
-//                }
-//            }
-//        }
-//        return islandSizes;
-//    }
-
-
     public int findConnectedNumbers(int[][] board) {
         int ans = 0;
         int n = board.length;
         int m = board[0].length;
         int[][] tempBoard = new int[n][m];
-
         for (int i = 0; i < n; i++) {
             System.arraycopy(board[i], 0, tempBoard[i], 0, m);
         }
-
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
                 if (tempBoard[i][j] > 0) {
@@ -399,158 +341,4 @@ public class AnalyzeMap {
         }
         return ans;
     }
-
-
-    //    private int bfsFindNumberIslands(int[][] arr, int r, int c, int land) {
-//        if (r < 0 || r >= arr.length || c < 0 || c >= arr[0].length || arr[r][c] < land) { //|| arr[r][c] != land
-//            return 0;
-//        }
-//
-//        int islandSize = 1;
-//        Queue<int[]> q = new LinkedList<>();
-//        //q.add(new int[]{r, c});
-//        q.offer(new int[]{r, c});
-//        int n = arr.length;
-//        int m = arr[0].length;
-//
-//
-//        while (!q.isEmpty()) {
-//
-//            //int[] a = q.remove();
-//            int[] a = q.poll();
-//            int i = a[0];
-//            int j = a[1];
-//            arr[i][j] = -2; // Mark the cell as visited
-//
-//            if (j + 1 < m && arr[i][j + 1] >= land) {
-//                arr[i][j + 1] = -2;
-//                //q.add(new int[]{i, j + 1});
-//                q.offer(new int[]{i, j + 1});
-//                islandSize++;
-//            }
-//
-//            if (j - 1 >= 0 && arr[i][j - 1] >= land) {
-//                arr[i][j - 1] = -2;
-//                //q.add(new int[]{i, j - 1});
-//                q.offer(new int[]{i, j - 1});
-//                islandSize++;
-//            }
-//
-//            if (i + 1 < n && arr[i + 1][j] >= land) {
-//                arr[i + 1][j] = -2;
-//                //q.add(new int[]{i + 1, j});
-//                q.offer(new int[]{i + 1, j});
-//                islandSize++;
-//            }
-//
-//            if (i - 1 >= 0 && arr[i - 1][j] >= land) {
-//                arr[i - 1][j] = -2;
-//                //q.add(new int[]{i - 1, j});
-//                q.offer(new int[]{i - 1, j});
-//                islandSize++;
-//            }
-//        }
-//        return islandSize;
-//    }
-
-
-    //    public ArrayList<NumberCell> findNumberCells(int[][] board) {
-//        int ans = 0;
-//        int n = board.length;
-//        int m = board[0].length;
-//        ArrayList<NumberCell> numberCells = new ArrayList<>();
-//        int[][] tempBoard = new int[n][m];
-//        int number;
-//
-//
-//        for (int i = 0; i < n; i++) {
-//            for (int j = 0; j < m; j++) {
-//                //tempBoard[i][j] = board[i][j];
-//                number=board[i][j];
-//
-//                if (number > 0) { //board[i][j] > 0
-//                    //numberCells.add(new NumberCell(i, j, tempBoard[i][j]));
-//                    numberCells.add(new NumberCell(i, j, number));
-//                }
-//            }
-//        }
-//        return numberCells;
-//    }
-
-
-    //    public ArrayList<NumberIsland> findNumberIslands(int[][] board) {
-//        //int ans = 0;
-//        int n = board.length;
-//        int m = board[0].length;
-//
-//        //int iteration = 0;
-//
-//        ArrayList<NumberIsland> numberIslands = new ArrayList<>();
-//        ArrayList<NumberCell> numberCells = new ArrayList<>();
-//        numberCells = findNumberCells(board); //WYWALA BLAD
-//        //ZAMIAST UZYWAC FINDNUMBERCELLS POPROSTU 2 FORY PRZEZ TABLICE I JESLI BOARD[I][J]>0 WYWOLAJ bfsFindNumberIslands
-//        //bfsFindNumberIslands - mozna sprobowac z boolean[][] zeby nie zmienialo tablicy z argumentu, nie bedzie
-//        //trzeba kopiowac tablicy przed wywolaniem wtedy
-//
-//        while(!numberCells.isEmpty()){
-//
-//            int[][] tempBoard = new int[n][m];
-//            for (int k = 0; k < n; k++) {
-//                System.arraycopy(board[k], 0, tempBoard[k], 0, m);
-//            }
-//
-//            int i = numberCells.getFirst().getR();
-//            int j = numberCells.getFirst().getC();
-//            if (board[i][j] > 0) {
-//                int ans = bfsFindNumberIslands(tempBoard, i, j, 0); //TO WYWALA STACKOVERFLOW
-//                numberIslands.add(new NumberIsland(i, j, numberCells.getFirst().getNumber(),ans));
-//                numberCells.removeFirst();
-//            }
-//        }
-//        return numberIslands;
-//    }
-
-
-    //    private int bfsFindNumberLakes(int[][] arr, int r, int c) {
-//        int islandSize = 1;
-//        Queue<int[]> q = new LinkedList<>();
-//        q.add(new int[]{r, c});
-//        int n = arr.length;
-//        int m = arr[0].length;
-//
-//
-//        while (!q.isEmpty()) {
-//            int[] a = q.remove();
-//            int i = a[0];
-//            int j = a[1];
-//            arr[i][j] = -2;
-//
-//            if (j + 1 < m && arr[i][j + 1] > 0) {
-//                arr[i][j + 1] = -2;
-//                q.add(new int[]{i, j + 1});
-//                islandSize++;
-//            }
-//
-//            if (j - 1 >= 0 && arr[i][j - 1] > 0) {
-//                arr[i][j - 1] = -2;
-//                q.add(new int[]{i, j - 1});
-//                islandSize++;
-//            }
-//
-//            if (i + 1 < n && arr[i + 1][j] > 0) {
-//                arr[i + 1][j] = -2;
-//                q.add(new int[]{i + 1, j});
-//                islandSize++;
-//            }
-//
-//            if (i - 1 >= 0 && arr[i - 1][j] > 0) {
-//                arr[i - 1][j] = -2;
-//                q.add(new int[]{i - 1, j});
-//                islandSize++;
-//            }
-//        }
-//        return islandSize;
-//    }
-
-
 }

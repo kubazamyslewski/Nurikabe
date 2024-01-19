@@ -41,13 +41,13 @@ public class GameInterface extends JFrame {
 
                 buttons[i][j] = button;
 
-
                 if (intBoard[i][j] >= 0) {
+                    //button.setText(Integer.toString(intBoard[i][j]));
                     updateButtonIcon(i, j);
                 }
 
+                //button.doClick(0);    // <- zabawny item
                 add(button);
-
             }
         }
     }
@@ -59,23 +59,25 @@ public class GameInterface extends JFrame {
         public CellClickListener(int row, int col) {
             this.row = row;
             this.col = col;
-
         }
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            // Zmiana wartości na planszy po kliknięciu
-            intBoard[row][col] = -1 - intBoard[row][col]; // 0 na -1, -1 na 0
+            if (intBoard[row][col] == 0){
+                intBoard[row][col] = -1;
+            }
+            else if (intBoard[row][col] == -1){
+                intBoard[row][col] = 0;
+            }
             updateButtonIcon(row, col);
         }
-
     }
 
     private void updateButtonIcon(int row, int col) {
         int value = intBoard[row][col];
         if (value == -1){
             // Obsługa zdarzenia kliknięcia przycisku (możesz dostosować tę część)
-            String imagePath = "resources/" + "zamalowane" + ".jpg";  // Zakładamy, że obrazy mają nazwy image0.jpg, image1.jpg, itd.
+            String imagePath = "Pictures/" + "zamalowane" + ".jpg";  // Zakładamy, że obrazy mają nazwy image0.jpg, image1.jpg, itd.
             ImageIcon originalIcon = new ImageIcon(getClass().getResource(imagePath));
             Image originalImage = originalIcon.getImage();
 
@@ -89,7 +91,7 @@ public class GameInterface extends JFrame {
             buttons[row][col].setIcon(scaledIcon);
         }
         if (value == 0){
-            String imagePath = "resources/" + "puste" + ".jpg";  // Zakładamy, że obrazy mają nazwy image0.jpg, image1.jpg, itd.
+            String imagePath = "Pictures/" + "puste" + ".jpg";  // Zakładamy, że obrazy mają nazwy image0.jpg, image1.jpg, itd.
             ImageIcon originalIcon = new ImageIcon(getClass().getResource(imagePath));
             Image originalImage = originalIcon.getImage();
 
@@ -104,7 +106,7 @@ public class GameInterface extends JFrame {
         }
         if (value > 0) {
             //String imagePath = "resources/" + value + ".jpg";
-            String imagePath = "resources/" + value + ".jpg";  // Zakładamy, że obrazy mają nazwy image0.jpg, image1.jpg, itd.
+            String imagePath = "Pictures/" + value + ".jpg";  // Zakładamy, że obrazy mają nazwy image0.jpg, image1.jpg, itd.
             ImageIcon originalIcon = new ImageIcon(getClass().getResource(imagePath));
             Image originalImage = originalIcon.getImage();
 
@@ -119,8 +121,6 @@ public class GameInterface extends JFrame {
         }
 
     }
-
-
 
 
     static int selectDifficulty() {

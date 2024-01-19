@@ -4,7 +4,7 @@ public class Game {
     static int size;
     private static int [][]board;
     public static void main(String[]args){
-        GameInterface gi = new GameInterface();
+        //GameInterface gi = new GameInterface();
 
         whatToDo();
 
@@ -39,6 +39,7 @@ public class Game {
                 CSVFileReader reader = new CSVFileReader("src/ExampleFile.csv", ",");
                 System.out.println(reader.toString());
                 reader.writeCSVFile("src/ExampleFile.csv",",");
+
                 //trzy ostatnie linijki to jest test czy wczytuje plus zapis koncowy (pewnie do wywalenia kiedyś)
                 break;
 

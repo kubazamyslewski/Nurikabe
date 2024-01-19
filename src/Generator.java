@@ -74,11 +74,8 @@ public class Generator {
 
             direction = directions.get(random.nextInt(directions.size()));
 
-
-            //moze checkpointsize zrobi generator lepszym
-            int checkpointsize = 10;
             //if possible directions more than 1 then save as checkpoint
-            if (directions.size() > 2 && checkpointPlace.size()<checkpointsize) {
+            if (directions.size() > 2) {
                 directions.remove(directions.indexOf(direction));
                 checkpointDirections.push(directions);
                 checkpointPlace.push(currentX);
@@ -108,6 +105,7 @@ public class Generator {
         int iteration = 0;
         Cell current;
         int[][] tempBoard = new int[n][m];
+        ArrayList<NumberCell> numberCells = new ArrayList<>();
         ArrayList<Cell> cells = new ArrayList<>();
 
         AnalyzeMap analyzeBoard = new AnalyzeMap();
