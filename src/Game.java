@@ -1,15 +1,11 @@
-import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Game {
     static int size;
     private static int [][]board;
     public static void main(String[]args){
-        //GameInterface gi = new GameInterface();
-
         whatToDo();
-
-
-        //giveBoard();
         for(int i=0; i<size; i++){
             for(int j=0; j<size; j++){
                 System.out.print(board[i][j] + " ");
@@ -19,14 +15,6 @@ public class Game {
     }
 
     static void whatToDo(){
-        /*System.out.println("Co chcesz zrobić?");
-        System.out.println("1. Wygenerować planszę do gry");
-        System.out.println("2. Zagrać na własnej planszy");
-
-        Scanner scanner = new Scanner(System.in);
-        int temp = scanner.nextInt();*/
-
-
         switch(GameInterface.whichBoard()){
             case 1:
                 size = difficultyLevel();
@@ -37,16 +25,36 @@ public class Game {
                 break;
             case 2:
                 CSVFileReader reader = new CSVFileReader("src/ExampleFile.csv", ",");
-                System.out.println(reader.toString());
-                reader.writeCSVFile("src/ExampleFile.csv",",");
-
-                //trzy ostatnie linijki to jest test czy wczytuje plus zapis koncowy (pewnie do wywalenia kiedyś)
+                board=intSwapper(reader.toString());
+                //reader.writeCSVFile("src/ExampleFile.csv",",");
+                GameInterface GUIi = new GameInterface(board);
                 break;
 
             default: System.out.println("Źle wybrany numer");
         }
     }
-
+    static int[][] intSwapper (String inputString) {
+        String[] rows = inputString.split("[\\n\\r]+");
+        List<int[]> resultArrayList = new ArrayList<>();
+        for (String row : rows) {
+            String[] numbersStr = row.trim().split("[,\\s]+");
+            List<Integer> rowList = new ArrayList<>();
+            for (String numStr : numbersStr) {
+                try {
+                    int num = Integer.parseInt(numStr);
+                    rowList.add(num);
+                } catch (NumberFormatException e) {
+                }
+            }
+            int[] rowArray = new int[rowList.size()];
+            for (int i = 0; i < rowList.size(); i++) {
+                rowArray[i] = rowList.get(i);
+            }
+            resultArrayList.add(rowArray);
+        }
+        int[][] resultArray = resultArrayList.toArray(new int[0][]);
+        return resultArray;
+    }
     static int difficultyLevel(){
         /*System.out.println("Wybierz poziom trudności:");
         System.out.println("1. Łatwy");
