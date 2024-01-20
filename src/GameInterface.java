@@ -294,8 +294,10 @@ public class GameInterface extends JFrame {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            intBoard[row][col] = -1 - intBoard[row][col];
-            updateButtonIcon(row, col);
+            if(intBoard[row][col] <1) {
+                intBoard[row][col] = -1 - intBoard[row][col];
+                updateButtonIcon(row, col);
+            }
         }
     }
 
