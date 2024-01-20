@@ -1,36 +1,27 @@
 import java.io.*;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CSVFileReader {
-    private List<int[]> rows = new ArrayList<>();
+    private List<String[]> rows = new ArrayList<>();
 
     public CSVFileReader(String filePath, String separator) {
         try {
             BufferedReader inFile = new BufferedReader(new FileReader(filePath));
             while (inFile.ready()) {
-                String[] values = inFile.readLine().split(separator);
-                int[] intValues = new int[values.length];
-
-                for (int i = 0; i < values.length; i++) {
-                    intValues[i] = Integer.parseInt(values[i]);
-                }
-
-                rows.add(intValues);
+                rows.add(inFile.readLine().split(separator));
             }
         } catch (FileNotFoundException fnfe) {
             fnfe.printStackTrace();
         } catch (IOException ioe) {
             ioe.printStackTrace();
-        } catch (NumberFormatException nfe) {
-            // Handle the case where a value couldn't be parsed as an integer
-            nfe.printStackTrace();
         }
     }
+    /**
+     * Writes the CSV data into the file.
+     * @param filePath of a file to write.
+     * @param separator to be used in written CSV.
+     */
     public void writeCSVFile(String filePath, String separator) {
         try {
             BufferedWriter outFile = new BufferedWriter(new FileWriter(filePath));
@@ -49,6 +40,9 @@ public class CSVFileReader {
         }
     }
 
+    /**
+     * @return {@code String} created from array of tables storing CSV file. Separates the data with ", " and rows with "\n"
+     */
     @Override
     public String toString() {
         String file = "";
@@ -60,4 +54,28 @@ public class CSVFileReader {
         }
         return file;
     }
+
+    public int[][] intSwapper (String inputString) {
+        String[] rows = inputString.split("[\\n\\r]+");
+        List<int[]> resultArrayList = new ArrayList<>();
+        for (String row : rows) {
+            String[] numbersStr = row.trim().split("[,\\s]+");
+            List<Integer> rowList = new ArrayList<>();
+            for (String numStr : numbersStr) {
+                try {
+                    int num = Integer.parseInt(numStr);
+                    rowList.add(num);
+                } catch (NumberFormatException e) {
+                }
+            }
+            int[] rowArray = new int[rowList.size()];
+            for (int i = 0; i < rowList.size(); i++) {
+                rowArray[i] = rowList.get(i);
+            }
+            resultArrayList.add(rowArray);
+        }
+        int[][] resultArray = resultArrayList.toArray(new int[0][]);
+        return resultArray;
+    }
+
 }
