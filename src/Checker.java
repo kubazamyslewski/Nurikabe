@@ -10,17 +10,26 @@ public class Checker {
      */
     public boolean IsCorrect(int[][] board)
     {
+
         int n= board.length;
+        int[][]tempboard = new int[n][n];
+        for(int i=0; i<n; ++i)
+        {
+            for(int j=0; j<n; ++j)
+            {
+                tempboard[i][j]=board[i][j];
+            }
+        }
         int sumofwhite=0, sumofblack=0;
         // sprawdzenie czy jest odpowiednia ilosc zamalowanych pol
         for(int i=0; i<n; ++i)
         {
             for(int j=0; j<n; ++j)
             {
-                if(board[i][j] == -1)
+                if(tempboard[i][j] == -1)
                     ++sumofblack;
                 else
-                    sumofwhite+=board[i][j];
+                    sumofwhite+=tempboard[i][j];
             }
         }
         if(sumofblack !=(n * n )-sumofwhite ) return false;
@@ -29,7 +38,7 @@ public class Checker {
         {
             for(int j=0; j<n-1; ++j)
             {
-                if(board[i][j] == -1 && board[i+1][j] ==-1 && board[i][j+1]==-1 && board[i+1][j+1]==-1)
+                if(tempboard[i][j] == -1 && tempboard[i+1][j] ==-1 && tempboard[i][j+1]==-1 && tempboard[i+1][j+1]==-1)
                     return false;
             }
         }
@@ -38,13 +47,13 @@ public class Checker {
         {
             for(int j=0; j<n; ++j)
             {
-                if(board[i][j]==-1)
+                if(tempboard[i][j]==-1)
                 {
                     boolean p1=false, p2=false, p3=false, p4=false;
-                    if (i > 0 && board[i-1][j]==-1) p1=true;
-                    if (j > 0 && board[i][j-1]==-1) p2=true;
-                    if (i < n-1 && board[i+1][j]==-1) p3=true;
-                    if (j < n-1 && board[i][j+1]==-1) p4=true;
+                    if (i > 0 && tempboard[i-1][j]==-1) p1=true;
+                    if (j > 0 && tempboard[i][j-1]==-1) p2=true;
+                    if (i < n-1 && tempboard[i+1][j]==-1) p3=true;
+                    if (j < n-1 && tempboard[i][j+1]==-1) p4=true;
                     if(!(p1||p2||p3||p4)) return false;
                 }
             }
@@ -56,9 +65,9 @@ public class Checker {
         {
             for(int j=0; j<n; ++j)
             {
-                if(board[i][j]>0)
+                if(tempboard[i][j]>0)
                 {
-                    int req=board[i][j];
+                    int req=tempboard[i][j];
                     int wyn=0;
                     q.add(new Punkt(i, j));
 
@@ -67,26 +76,36 @@ public class Checker {
                         ++wyn;
                         Punkt p=q.remove();
                         odw[p.first][p.second]=true;
-                        board[p.first][p.second]=-2;
+                        tempboard[p.first][p.second]=-2;
                         if(p.first>0)
                         {
-                            if(board[p.first-1][p.second] == 0 && !odw[p.first - 1][p.second])
+                            if(tempboard[p.first-1][p.second] == 0 && !odw[p.first - 1][p.second]){
                                 q.add(new Punkt(p.first-1, p.second));
+                                odw[p.first-1][p.second]=true;
+                            }
+
                         }
                         if(p.second>0)
                         {
-                            if(board[p.first][p.second-1] == 0 && !odw[p.first][p.second-1])
+                            if(tempboard[p.first][p.second-1] == 0 && !odw[p.first][p.second-1]){
                                 q.add(new Punkt(p.first, p.second-1));
+                                odw[p.first][p.second-1] =true;
+                            }
+
                         }
                         if(p.first<n-1)
                         {
-                            if(board[p.first+1][p.second] == 0 && !odw[p.first+1][p.second])
-                                q.add(new Punkt(p.first+1, p.second));
+                            if(tempboard[p.first+1][p.second] == 0 && !odw[p.first+1][p.second]) {
+                                q.add(new Punkt(p.first + 1, p.second));
+                                odw[p.first+1][p.second]=true;
+                            }
                         }
                         if(p.second<n-1)
                         {
-                            if(board[p.first][p.second+1] == 0 && !odw[p.first][p.second+1])
-                                q.add(new Punkt(p.first, p.second+1));
+                            if(tempboard[p.first][p.second+1] == 0 && !odw[p.first][p.second+1]) {
+                                odw[p.first][p.second+1]=true;
+                                q.add(new Punkt(p.first, p.second + 1));
+                            }
                         }
 
                     }
@@ -109,21 +128,22 @@ public class Checker {
 
     }
     // main do testowania
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         Scanner sc =new Scanner(System.in);
         Checker checker = new Checker();
         System.out.println("Podaj rozmiar planszy");
         int n;
         n=sc.nextInt();
-        int[][] board = new int[n][n];
+        int[][] tempboard = new int[n][n];
         System.out.println("Podaj rozwiazaną planszę(0 to białe pola, -1 to czarne pola)");
         for(int i=0; i<n; ++i)
         {
             for(int j=0; j<n; ++j)
             {
-                board[i][j]=sc.nextInt();
+                tempboard[i][j]=sc.nextInt();
             }
         }
-        System.out.println(checker.IsCorrect(board));
+        System.out.println(checker.IsCorrect(tempboard));
     }
+    */
 }
