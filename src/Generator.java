@@ -10,23 +10,6 @@ public class Generator {
     private int [][]board;
     private int [][] boardToPlay;
 
-//    Generator(int size){
-//        this.size=size;
-//        x = generateNumber(size);
-//        y = generateNumber(size);
-//
-//        //System.out.println(x);
-//        //System.out.println(y);
-//
-//        //board=generateBoard(size);
-//        board = new int[size][size];
-//
-//        boardToPlay = new int[size][size];
-//
-//
-//
-//    }
-
     int generateNumber(int s){
         Random random = new Random();
         return random.nextInt(s);

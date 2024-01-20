@@ -24,35 +24,25 @@ public class Solver {
         bestNeighbour = findBestBoard(findNeighbourBoards(board));
         neighbourSumState = sumState(findBoardState(bestNeighbour));
 
-
         if (neighbourSumState < currentSumState) {
-            //System.out.println("changing current");
             boardToSolve = copyBoard(bestNeighbour);
-            //boardToSolve = solve(boardToSolve, k, 0);
 
         }
 
         while (neighbourSumState >= currentSumState && kCount <= k) {
-            //System.out.println("while loop " + kCount);
             if (neighbourSumState < currentSumState) {
                 currentSumState = sumState(findBoardState(bestNeighbour));
             }
             bestNeighbour = findBestBoard(findNeighbourBoards(bestNeighbour));
             neighbourSumState = sumState(findBoardState(bestNeighbour));
             boardToSolve = copyBoard(bestNeighbour);
-
             ++kCount;
-            //System.out.println(currentSumState+" current State");
-            //System.out.println(neighbourSumState + " neihgbour state");
-//            System.out.println(kCount + "kcount");
         }
         if (kCount > k) {
             System.out.println("KCount too big ending ");
             return boardToSolve;
         }
-
         boardToSolve = solve(boardToSolve, k, 0);
-
         return boardToSolve;
     }
 
