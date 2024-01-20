@@ -1,7 +1,9 @@
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 public class GameInterface extends JFrame {
 
@@ -81,16 +83,40 @@ public class GameInterface extends JFrame {
         newBoardButton.addActionListener(new NewBoardButtonClickListener());
 
         // Dodaj przycisk z trzema opcjami
-        //JComboBox<String> difficultyComboBox = new JComboBox<>(new String[]{"Hard", "Medium", "Easy"});
-        JComboBox difficultyComboBox = new JComboBox(new String[]{"Hard","Medium","Easy"});
+        JComboBox<String> difficultyComboBox = new JComboBox<>(new String[]{"Hard", "Medium", "Easy"});
         difficultyComboBox.addActionListener(new DifficultyComboBoxActionListener());
+        //difficultyComboBox.setRenderer(new DifficultyComboBoxRenderer());
+
+        // Dodaj przycisk do wybierania pliku
+        JButton fileChooserButton = new JButton("Choose File");
+        fileChooserButton.addActionListener(new FileChooserButtonClickListener());
+
         controlPanel.add(solveButton);
         controlPanel.add(checkButton);
         controlPanel.add(clearButton);
         controlPanel.add(newBoardButton);
         controlPanel.add(difficultyComboBox);
+        controlPanel.add(fileChooserButton);
 
         return controlPanel;
+    }
+
+
+    private class FileChooserButtonClickListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            JFileChooser fileChooser = new JFileChooser();
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV Files", "csv");
+            fileChooser.setFileFilter(filter);
+
+            int result = fileChooser.showOpenDialog(GameInterface.this);
+
+            if (result == JFileChooser.APPROVE_OPTION) {
+                File selectedFile = fileChooser.getSelectedFile();
+                // Tutaj możesz zaimplementować logikę obsługi wybranego pliku
+                System.out.println("Selected file: " + selectedFile.getAbsolutePath());
+            }
+        }
     }
 
 
