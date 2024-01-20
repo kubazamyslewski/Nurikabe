@@ -308,11 +308,13 @@ public class GameInterface extends JFrame {
             if (isItSquare(intBoard, row, col)) {
                 for (int i = -1; i < 2; i++) {
                     for (int j = -1; j < 2; j++) {
-                        if (isItSquare(intBoard, row + i, col + j) && intBoard[row + i][col + j] == -1 && (row + i >= 0 && col + j >= 0 && row + i < SIZE && col + j < SIZE)) {
-                            if(intBoard[i+i][j+i]==-1){
+                        if(row+i>= 0 && row+i < SIZE && col+j >=0 && col+j <SIZE)
+                        {
+                            if(intBoard[row+i][col+j]==-1){
+                                if (isItSquare(intBoard, row + i, col + j)) {
                                 buttons[row + i][col + j].setIcon(bufferedIcons[22]);//x
                             }
-
+                            }
                         }
                     }
                 }
