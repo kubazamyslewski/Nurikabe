@@ -116,16 +116,20 @@ public class GameInterface extends JFrame {
                 // Tutaj możesz zaimplementować logikę obsługi wybranego pliku
                 System.out.println("Selected file: " + filePath);
 
-                CSVFileReader reader = new CSVFileReader("src/ExampleFile.csv", ",");
+                CSVFileReader reader = new CSVFileReader(filePath, ",");
                 //int[][] boardFromFile = intSwapper(reader.toString());
 
-                int[][] boardFromFile = Game.intSwapper(reader.toString());
+                int[][] boardFromFile = reader.intSwapper(reader.toString());
                 SIZE = boardFromFile.length;
+                startingBoard = new int[SIZE][SIZE];
+                intBoard = new int[SIZE][SIZE];
+                solvedBoard = new int[SIZE][SIZE];
                 System.out.println(SIZE);
                 targetSize = 500 / SIZE;
                 initializeBufferedIcons();
                 for (int i = 0; i < SIZE; i++) {
                     System.arraycopy(boardFromFile[i], 0, intBoard[i], 0, SIZE);
+                    System.arraycopy(intBoard[i], 0, startingBoard[i], 0, SIZE);
                 }
                 initializeBoard(intBoard);
             }
