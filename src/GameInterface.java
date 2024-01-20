@@ -14,11 +14,12 @@ public class GameInterface extends JFrame {
     Checker checker = new Checker();
     Generator generator = new Generator();
     private ImageIcon[] bufferedIcons = new ImageIcon[23];
-    private int targetSize=50;
+    private int targetSize;
 
     public GameInterface(int[][] intBoard) {
         this.intBoard = intBoard;
         this.SIZE = intBoard.length;
+        this.targetSize=500/SIZE;
         this.startingBoard = new int[SIZE][SIZE];
         for (int i = 0; i < SIZE; i++) {
             System.arraycopy(intBoard[i], 0, startingBoard[i], 0, SIZE);
@@ -47,6 +48,7 @@ public class GameInterface extends JFrame {
 
     private JPanel createButtonPanel() {
         JPanel buttonPanel = new JPanel(new GridLayout(SIZE, SIZE));
+        buttonPanel.setPreferredSize(new Dimension(SIZE*targetSize, SIZE*targetSize));
         buttons = new JButton[SIZE][SIZE];
 
         for (int i = 0; i < SIZE; i++) {
@@ -177,6 +179,7 @@ public class GameInterface extends JFrame {
             for (int i = 0; i < SIZE; i++) {
                 for (int j = 0; j < SIZE; j++) {
                     if (intBoard[i][j] == -1) {
+                        intBoard[i][j]=0;
                         buttons[i][j].setIcon(bufferedIcons[21]);
                     }
                 }
@@ -191,6 +194,7 @@ public class GameInterface extends JFrame {
             for (int i = 0; i < SIZE; i++) {
                 System.arraycopy(solvedBoard[i], 0, intBoard[i], 0, SIZE);
             }
+
             for (int i = 0; i < SIZE; i++) {
                 for (int j = 0; j < SIZE; j++) {
                     updateButtonIcon(i, j);
@@ -206,6 +210,13 @@ public class GameInterface extends JFrame {
                 System.out.println("NAJS");
             }else {
                 System.out.println("NO LIPA");
+            }
+
+            for (int i = 0; i < SIZE; i++) {
+                for (int j = 0; j < SIZE; j++) {
+                    System.out.print(intBoard[i][j]+" ");
+                }
+                System.out.println();
             }
         }
     }

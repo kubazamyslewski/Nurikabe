@@ -8,7 +8,7 @@ public class Checker {
     numerki to numerki
     0 to białe pole
      */
-    static boolean IsCorrect(int[][] board)
+    public boolean IsCorrect(int[][] board)
     {
         int n= board.length;
         int sumofwhite=0, sumofblack=0;
@@ -111,6 +111,7 @@ public class Checker {
     // main do testowania
     public static void main(String[] args) {
         Scanner sc =new Scanner(System.in);
+        Checker checker = new Checker();
         System.out.println("Podaj rozmiar planszy");
         int n;
         n=sc.nextInt();
@@ -123,7 +124,6 @@ public class Checker {
                 board[i][j]=sc.nextInt();
             }
         }
-        System.out.println(Checker.IsCorrect(board));
-
+        System.out.println(checker.IsCorrect(board));
     }
 }

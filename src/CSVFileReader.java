@@ -1,27 +1,36 @@
 import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CSVFileReader {
-    private List<String[]> rows = new ArrayList<>();
+    private List<int[]> rows = new ArrayList<>();
 
     public CSVFileReader(String filePath, String separator) {
         try {
             BufferedReader inFile = new BufferedReader(new FileReader(filePath));
             while (inFile.ready()) {
-                rows.add(inFile.readLine().split(separator));
+                String[] values = inFile.readLine().split(separator);
+                int[] intValues = new int[values.length];
+
+                for (int i = 0; i < values.length; i++) {
+                    intValues[i] = Integer.parseInt(values[i]);
+                }
+
+                rows.add(intValues);
             }
         } catch (FileNotFoundException fnfe) {
             fnfe.printStackTrace();
         } catch (IOException ioe) {
             ioe.printStackTrace();
+        } catch (NumberFormatException nfe) {
+            // Handle the case where a value couldn't be parsed as an integer
+            nfe.printStackTrace();
         }
     }
-    /**
-     * Writes the CSV data into the file.
-     * @param filePath of a file to write.
-     * @param separator to be used in written CSV.
-     */
     public void writeCSVFile(String filePath, String separator) {
         try {
             BufferedWriter outFile = new BufferedWriter(new FileWriter(filePath));
@@ -40,9 +49,6 @@ public class CSVFileReader {
         }
     }
 
-    /**
-     * @return {@code String} created from array of tables storing CSV file. Separates the data with ", " and rows with "\n"
-     */
     @Override
     public String toString() {
         String file = "";
@@ -54,5 +60,4 @@ public class CSVFileReader {
         }
         return file;
     }
-
 }
