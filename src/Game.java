@@ -29,7 +29,6 @@ public class Game {
                 //reader.writeCSVFile("src/ExampleFile.csv",", ");
                 GameInterface GUIi = new GameInterface(board);
                 break;
-
             default: System.out.println("Źle wybrany numer");
         }
     }
@@ -56,16 +55,6 @@ public class Game {
         return resultArray;
     }
     static int difficultyLevel(){
-        /*System.out.println("Wybierz poziom trudności:");
-        System.out.println("1. Łatwy");
-        System.out.println("2. Średni");
-        System.out.println("3. Trudny");
-
-        Scanner scanner = new Scanner(System.in);
-        int temporary = scanner.nextInt();
-        scanner.close();*/
-
-
         switch(GameInterface.selectDifficulty()){
             case 1: return 5;
             case 2: return 7;
