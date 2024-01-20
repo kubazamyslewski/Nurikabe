@@ -117,7 +117,6 @@ public class GameInterface extends JFrame {
                 System.out.println("Selected file: " + filePath);
 
                 CSVFileReader reader = new CSVFileReader(filePath, ",");
-                //int[][] boardFromFile = intSwapper(reader.toString());
 
                 int[][] boardFromFile = reader.intSwapper(reader.toString());
                 SIZE = boardFromFile.length;
