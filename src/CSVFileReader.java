@@ -55,4 +55,27 @@ public class CSVFileReader {
         return file;
     }
 
+    public int[][] intSwapper (String inputString) {
+        String[] rows = inputString.split("[\\n\\r]+");
+        List<int[]> resultArrayList = new ArrayList<>();
+        for (String row : rows) {
+            String[] numbersStr = row.trim().split("[,\\s]+");
+            List<Integer> rowList = new ArrayList<>();
+            for (String numStr : numbersStr) {
+                try {
+                    int num = Integer.parseInt(numStr);
+                    rowList.add(num);
+                } catch (NumberFormatException e) {
+                }
+            }
+            int[] rowArray = new int[rowList.size()];
+            for (int i = 0; i < rowList.size(); i++) {
+                rowArray[i] = rowList.get(i);
+            }
+            resultArrayList.add(rowArray);
+        }
+        int[][] resultArray = resultArrayList.toArray(new int[0][]);
+        return resultArray;
+    }
+
 }

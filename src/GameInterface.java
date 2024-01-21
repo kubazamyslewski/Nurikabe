@@ -1,7 +1,9 @@
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 public class GameInterface extends JFrame {
 
@@ -14,11 +16,12 @@ public class GameInterface extends JFrame {
     Checker checker = new Checker();
     Generator generator = new Generator();
     private ImageIcon[] bufferedIcons = new ImageIcon[23];
-    private int targetSize=50;
+    private int targetSize;
 
     public GameInterface(int[][] intBoard) {
         this.intBoard = intBoard;
         this.SIZE = intBoard.length;
+        this.targetSize = 500 / SIZE;
         this.startingBoard = new int[SIZE][SIZE];
         for (int i = 0; i < SIZE; i++) {
             System.arraycopy(intBoard[i], 0, startingBoard[i], 0, SIZE);
@@ -44,9 +47,9 @@ public class GameInterface extends JFrame {
     }
 
 
-
     private JPanel createButtonPanel() {
         JPanel buttonPanel = new JPanel(new GridLayout(SIZE, SIZE));
+        buttonPanel.setPreferredSize(new Dimension(SIZE * targetSize, SIZE * targetSize));
         buttons = new JButton[SIZE][SIZE];
 
         for (int i = 0; i < SIZE; i++) {
@@ -79,16 +82,57 @@ public class GameInterface extends JFrame {
         newBoardButton.addActionListener(new NewBoardButtonClickListener());
 
         // Dodaj przycisk z trzema opcjami
-        //JComboBox<String> difficultyComboBox = new JComboBox<>(new String[]{"Hard", "Medium", "Easy"});
-        JComboBox difficultyComboBox = new JComboBox(new String[]{"Hard","Medium","Easy"});
+        JComboBox<String> difficultyComboBox = new JComboBox<>(new String[]{"Hard", "Medium", "Easy"});
         difficultyComboBox.addActionListener(new DifficultyComboBoxActionListener());
+        //difficultyComboBox.setRenderer(new DifficultyComboBoxRenderer());
+
+        // Dodaj przycisk do wybierania pliku
+        JButton fileChooserButton = new JButton("Choose File");
+        fileChooserButton.addActionListener(new FileChooserButtonClickListener());
+
         controlPanel.add(solveButton);
         controlPanel.add(checkButton);
         controlPanel.add(clearButton);
         controlPanel.add(newBoardButton);
         controlPanel.add(difficultyComboBox);
+        controlPanel.add(fileChooserButton);
 
         return controlPanel;
+    }
+
+
+    private class FileChooserButtonClickListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            JFileChooser fileChooser = new JFileChooser();
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV Files", "csv");
+            fileChooser.setFileFilter(filter);
+
+            int result = fileChooser.showOpenDialog(GameInterface.this);
+
+            if (result == JFileChooser.APPROVE_OPTION) {
+                File selectedFile = fileChooser.getSelectedFile();
+                String filePath = selectedFile.getAbsolutePath();
+                // Tutaj możesz zaimplementować logikę obsługi wybranego pliku
+                System.out.println("Selected file: " + filePath);
+
+                CSVFileReader reader = new CSVFileReader(filePath, ",");
+
+                int[][] boardFromFile = reader.intSwapper(reader.toString());
+                SIZE = boardFromFile.length;
+                startingBoard = new int[SIZE][SIZE];
+                intBoard = new int[SIZE][SIZE];
+                solvedBoard = new int[SIZE][SIZE];
+                System.out.println(SIZE);
+                targetSize = 500 / SIZE;
+                initializeBufferedIcons();
+                for (int i = 0; i < SIZE; i++) {
+                    System.arraycopy(boardFromFile[i], 0, intBoard[i], 0, SIZE);
+                    System.arraycopy(intBoard[i], 0, startingBoard[i], 0, SIZE);
+                }
+                initializeBoard(intBoard);
+            }
+        }
     }
 
 
@@ -116,7 +160,7 @@ public class GameInterface extends JFrame {
         private void setSizeAndInitializeBoard(int size) {
             // Zmiana rozmiaru planszy
             SIZE = size;
-            targetSize = 500/SIZE;
+            targetSize = 500 / SIZE;
             initializeBufferedIcons();
 
             // Ponowna inicjalizacja planszy
@@ -145,7 +189,7 @@ public class GameInterface extends JFrame {
 
         // Dodanie przycisków do planszy
         JPanel buttonPanel = createButtonPanel();
-        buttonPanel.setPreferredSize(new Dimension(SIZE*targetSize, SIZE*targetSize));
+        buttonPanel.setPreferredSize(new Dimension(SIZE * targetSize, SIZE * targetSize));
         add(buttonPanel, BorderLayout.CENTER);
 
         // Ponowne ustawienie rozmiaru okna
@@ -164,7 +208,7 @@ public class GameInterface extends JFrame {
             }
             for (int i = 0; i < SIZE; i++) {
                 for (int j = 0; j < SIZE; j++) {
-                    updateButtonIcon(i,j);
+                    updateButtonIcon(i, j);
                 }
             }
         }
@@ -177,6 +221,7 @@ public class GameInterface extends JFrame {
             for (int i = 0; i < SIZE; i++) {
                 for (int j = 0; j < SIZE; j++) {
                     if (intBoard[i][j] == -1) {
+                        intBoard[i][j] = 0;
                         buttons[i][j].setIcon(bufferedIcons[21]);
                     }
                 }
@@ -191,6 +236,7 @@ public class GameInterface extends JFrame {
             for (int i = 0; i < SIZE; i++) {
                 System.arraycopy(solvedBoard[i], 0, intBoard[i], 0, SIZE);
             }
+
             for (int i = 0; i < SIZE; i++) {
                 for (int j = 0; j < SIZE; j++) {
                     updateButtonIcon(i, j);
@@ -202,10 +248,18 @@ public class GameInterface extends JFrame {
     private class CheckButtonClickListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            if(checker.IsCorrect(intBoard)){
+            if (checker.IsCorrect(intBoard)) {
                 System.out.println("NAJS");
-            }else {
+            } else {
                 System.out.println("NO LIPA");
+            }
+
+            //printuje tablice ze zmmienionymi wartościami
+            for (int i = 0; i < SIZE; i++) {
+                for (int j = 0; j < SIZE; j++) {
+                    System.out.print(intBoard[i][j] + " ");
+                }
+                System.out.println();
             }
         }
     }
@@ -240,8 +294,10 @@ public class GameInterface extends JFrame {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            intBoard[row][col] = -1 - intBoard[row][col];
-            updateButtonIcon(row, col);
+            if(intBoard[row][col] <1) {
+                intBoard[row][col] = -1 - intBoard[row][col];
+                updateButtonIcon(row, col);
+            }
         }
     }
 
@@ -252,8 +308,13 @@ public class GameInterface extends JFrame {
             if (isItSquare(intBoard, row, col)) {
                 for (int i = -1; i < 2; i++) {
                     for (int j = -1; j < 2; j++) {
-                        if (isItSquare(intBoard, row + i, col + j) && intBoard[row + i][col + j] == -1) {
-                            buttons[row + i][col + j].setIcon(bufferedIcons[22]);//x
+                        if(row+i>= 0 && row+i < SIZE && col+j >=0 && col+j <SIZE)
+                        {
+                            if(intBoard[row+i][col+j]==-1){
+                                if (isItSquare(intBoard, row + i, col + j)) {
+                                buttons[row + i][col + j].setIcon(bufferedIcons[22]);//x
+                            }
+                            }
                         }
                     }
                 }
