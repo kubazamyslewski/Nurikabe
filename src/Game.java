@@ -21,12 +21,10 @@ public class Game {
                 Generator generator = new Generator();
                 board = generator.makeBoardToPlay(generator.generateBoard(size));
                 GameInterface GUI = new GameInterface(board);
-                //giveBoard();
                 break;
             case 2:
                 CSVFileReader reader = new CSVFileReader("src/ExampleFile.csv", ",");
                 board= reader.intSwapper(reader.toString());
-                //reader.writeCSVFile("src/ExampleFile.csv",", ");
                 GameInterface GUIi = new GameInterface(board);
                 break;
             default: System.out.println("Źle wybrany numer");
@@ -56,9 +54,9 @@ public class Game {
     }
     static int difficultyLevel(){
         switch(GameInterface.selectDifficulty()){
-            case 1: return 5;
-            case 2: return 7;
-            case 3: return 10;
+            case 1: return 4;
+            case 2: return 6;
+            case 3: return 8;
             default: System.out.println("Źle wybrany numer");
         }
         return 0;

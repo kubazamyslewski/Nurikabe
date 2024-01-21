@@ -205,15 +205,12 @@ public class Solver {
         }
         return difference;
     }
-
     public boolean isValid(int[][] board, int r, int c) {
         if (r < 0 || r >= board.length || c < 0 || c >= board[0].length) {
             return false;
         }
         return true;
     }
-
-
     public int[][] copyBoard(int[][] toCopy) {
         int n = toCopy.length;
         int m = toCopy[0].length;

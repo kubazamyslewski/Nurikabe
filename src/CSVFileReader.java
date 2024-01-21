@@ -4,7 +4,6 @@ import java.util.List;
 
 public class CSVFileReader {
     private List<String[]> rows = new ArrayList<>();
-
     public CSVFileReader(String filePath, String separator) {
         try {
             BufferedReader inFile = new BufferedReader(new FileReader(filePath));
@@ -17,11 +16,6 @@ public class CSVFileReader {
             ioe.printStackTrace();
         }
     }
-    /**
-     * Writes the CSV data into the file.
-     * @param filePath of a file to write.
-     * @param separator to be used in written CSV.
-     */
     public void writeCSVFile(String filePath, String separator) {
         try {
             BufferedWriter outFile = new BufferedWriter(new FileWriter(filePath));
@@ -39,10 +33,6 @@ public class CSVFileReader {
             ioe.printStackTrace();
         }
     }
-
-    /**
-     * @return {@code String} created from array of tables storing CSV file. Separates the data with ", " and rows with "\n"
-     */
     @Override
     public String toString() {
         String file = "";
@@ -54,7 +44,6 @@ public class CSVFileReader {
         }
         return file;
     }
-
     public int[][] intSwapper (String inputString) {
         String[] rows = inputString.split("[\\n\\r]+");
         List<int[]> resultArrayList = new ArrayList<>();
@@ -77,5 +66,4 @@ public class CSVFileReader {
         int[][] resultArray = resultArrayList.toArray(new int[0][]);
         return resultArray;
     }
-
 }

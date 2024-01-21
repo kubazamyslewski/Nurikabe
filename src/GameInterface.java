@@ -15,7 +15,7 @@ public class GameInterface extends JFrame {
     Solver solver = new Solver();
     Checker checker = new Checker();
     Generator generator = new Generator();
-    private ImageIcon[] bufferedIcons = new ImageIcon[23];
+    private ImageIcon[] bufferedIcons = new ImageIcon[33];
     private int targetSize;
 
     public GameInterface(int[][] intBoard) {
@@ -145,13 +145,13 @@ public class GameInterface extends JFrame {
             // Obsługa wybranej trudności
             if ("Hard".equals(selectedDifficulty)) {
                 // Ustaw rozmiar planszy na trudny (np. 8x8)
-                setSizeAndInitializeBoard(10);
+                setSizeAndInitializeBoard(8);
             } else if ("Medium".equals(selectedDifficulty)) {
                 // Ustaw rozmiar planszy na średni (np. 5x5)
-                setSizeAndInitializeBoard(7);
+                setSizeAndInitializeBoard(6);
             } else if ("Easy".equals(selectedDifficulty)) {
                 // Ustaw rozmiar planszy na łatwy (np. 4x4)
-                setSizeAndInitializeBoard(5);
+                setSizeAndInitializeBoard(4);
             }
 
         }
@@ -222,7 +222,7 @@ public class GameInterface extends JFrame {
                 for (int j = 0; j < SIZE; j++) {
                     if (intBoard[i][j] == -1) {
                         intBoard[i][j] = 0;
-                        buttons[i][j].setIcon(bufferedIcons[21]);
+                        buttons[i][j].setIcon(bufferedIcons[31]);
                     }
                 }
             }
@@ -232,7 +232,7 @@ public class GameInterface extends JFrame {
     private class SolveButtonClickListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            solvedBoard = solver.solve(intBoard, 100_000, 0);
+            solvedBoard = solver.solve(intBoard, 500_000, 0);
             for (int i = 0; i < SIZE; i++) {
                 System.arraycopy(solvedBoard[i], 0, intBoard[i], 0, SIZE);
             }
@@ -312,14 +312,14 @@ public class GameInterface extends JFrame {
                         {
                             if(intBoard[row+i][col+j]==-1){
                                 if (isItSquare(intBoard, row + i, col + j)) {
-                                buttons[row + i][col + j].setIcon(bufferedIcons[22]);//x
+                                buttons[row + i][col + j].setIcon(bufferedIcons[32]);//x
                             }
                             }
                         }
                     }
                 }
             } else {
-                buttons[row][col].setIcon(bufferedIcons[23]);
+                buttons[row][col].setIcon(bufferedIcons[33]);
             }
 
         }
@@ -329,13 +329,13 @@ public class GameInterface extends JFrame {
                     for (int j = -1; j < 2; j++) {
                         if (!isItSquare(intBoard, row + i, col + j) && (row + i >= 0 && col + j >= 0 && row + i < SIZE && col + j < SIZE)) {
                             if (intBoard[row + i][col + j] == -1) {
-                                buttons[row + i][col + j].setIcon(bufferedIcons[23]);
+                                buttons[row + i][col + j].setIcon(bufferedIcons[33]);
                             }
                         }
                     }
                 }
             }
-            buttons[row][col].setIcon(bufferedIcons[21]);
+            buttons[row][col].setIcon(bufferedIcons[31]);
         }
         if (value > 0) {
             buttons[row][col].setIcon(bufferedIcons[value]);
@@ -347,7 +347,7 @@ public class GameInterface extends JFrame {
     private void updateButtonIconOnStart(int row, int col) {
         int value = intBoard[row][col];
         if (value == 0) {
-            buttons[row][col].setIcon(bufferedIcons[21]);
+            buttons[row][col].setIcon(bufferedIcons[31]);
         }
         if (value > 0) {
             buttons[row][col].setIcon(bufferedIcons[value]);
@@ -446,13 +446,13 @@ public class GameInterface extends JFrame {
     }
 
     private void initializeBufferedIcons() {
-        bufferedIcons = new ImageIcon[24];
+        bufferedIcons = new ImageIcon[34];
         String imagePath;
         ImageIcon originalIcon;
         Image originalImage;
         //int targetSize = 40;
         Image scaledImage;
-        for (int i = 1; i <= 20; i++) {
+        for (int i = 1; i <= 30; i++) {
             imagePath = "Pictures/" + i + ".jpg";
             originalIcon = new ImageIcon(getClass().getResource(imagePath));
             originalImage = originalIcon.getImage();
@@ -463,19 +463,19 @@ public class GameInterface extends JFrame {
         originalIcon = new ImageIcon(getClass().getResource(imagePath));
         originalImage = originalIcon.getImage();
         scaledImage = originalImage.getScaledInstance(targetSize, targetSize, Image.SCALE_SMOOTH);
-        bufferedIcons[21] = new ImageIcon(scaledImage);
+        bufferedIcons[31] = new ImageIcon(scaledImage);
 
         imagePath = "Pictures/x.jpg";
         originalIcon = new ImageIcon(getClass().getResource(imagePath));
         originalImage = originalIcon.getImage();
         scaledImage = originalImage.getScaledInstance(targetSize, targetSize, Image.SCALE_SMOOTH);
-        bufferedIcons[22] = new ImageIcon(scaledImage);
+        bufferedIcons[32] = new ImageIcon(scaledImage);
 
         imagePath = "Pictures/zamalowane.jpg";
         originalIcon = new ImageIcon(getClass().getResource(imagePath));
         originalImage = originalIcon.getImage();
         scaledImage = originalImage.getScaledInstance(targetSize, targetSize, Image.SCALE_SMOOTH);
-        bufferedIcons[23] = new ImageIcon(scaledImage);
+        bufferedIcons[33] = new ImageIcon(scaledImage);
     }
 
 

@@ -124,26 +124,5 @@ public class Checker {
             this.first = first;
             this.second = second;
         }
-
-
     }
-    // main do testowania
-    /*public static void main(String[] args) {
-        Scanner sc =new Scanner(System.in);
-        Checker checker = new Checker();
-        System.out.println("Podaj rozmiar planszy");
-        int n;
-        n=sc.nextInt();
-        int[][] tempboard = new int[n][n];
-        System.out.println("Podaj rozwiazaną planszę(0 to białe pola, -1 to czarne pola)");
-        for(int i=0; i<n; ++i)
-        {
-            for(int j=0; j<n; ++j)
-            {
-                tempboard[i][j]=sc.nextInt();
-            }
-        }
-        System.out.println(checker.IsCorrect(tempboard));
-    }
-    */
 }
