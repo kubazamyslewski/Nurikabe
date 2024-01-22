@@ -29,9 +29,9 @@ public class Solver {
         }
 
         while (neighbourSumState >= currentSumState && kCount <= k) {
-            if (neighbourSumState < currentSumState) {
-                currentSumState = sumState(findBoardState(bestNeighbour));
-            }
+
+            currentSumState = sumState(findBoardState(bestNeighbour));
+
             bestNeighbour = findBestBoard(findNeighbourBoards(bestNeighbour));
             neighbourSumState = sumState(findBoardState(bestNeighbour));
             boardToSolve = copyBoard(bestNeighbour);
@@ -87,26 +87,17 @@ public class Solver {
             }
         }
 
-        while (blackCellsFromBoard.isEmpty() || blackCellsFromBoard.size() < board.length-1) {
+        while (blackCellsFromBoard.isEmpty() || blackCellsFromBoard.size() < board.length - 1) {
             if (board[r][c] == 0) {
                 board[r][c] = -1;
                 blackCellsFromBoard.add(new Pair(r, c));
             }
-            if (r<=c){
+            if (r <= c) {
                 c--;
-            }else {
+            } else {
                 r--;
             }
         }
-//        while (blackCellsFromBoard.isEmpty()) {
-//            if (board[r][c] == 0) {
-//                board[r][c] = -1;
-//                blackCellsFromBoard.add(new Pair(r, c));
-//            }
-//            r--;
-//            c--;
-//        }
-
 
         index = ThreadLocalRandom.current().nextInt(blackCellsFromBoard.size());
         r = blackCellsFromBoard.get(index).getR();
@@ -121,7 +112,6 @@ public class Solver {
             for (int j = -1; j < 2; j++) {
                 if (isValid(board, r + i, c + j)) {
                     int[][] tempBoard = copyBoard(board);
-
                     if (board[r + i][c + j] == -1) {
                         tempBoard[r + i][c + j] = 0;
                         boards.add(tempBoard);
@@ -130,7 +120,6 @@ public class Solver {
                         tempBoard[r + i][c + j] = -1;
                         boards.add(tempBoard);
                     }
-
                 }
                 if (isValid(board, rWhite + i, cWhite + j)) {
                     int[][] tempBoard = copyBoard(board);
@@ -142,7 +131,6 @@ public class Solver {
                         tempBoard[rWhite + i][cWhite + j] = -1;
                         boards.add(tempBoard);
                     }
-
                 }
             }
         }
@@ -181,7 +169,7 @@ public class Solver {
     }
 
 
-    // dla liczenia y
+    // dla liczenia wartości y
     public int diffNumberLakes(ArrayList<NumberIsland> numberIslands) {
         int difference = 0;
         NumberIsland currentNumberIsland;

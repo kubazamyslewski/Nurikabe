@@ -4,9 +4,10 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.Objects;
 
 public class GameInterface extends JFrame {
-
+    private int filesCounter=0;
     private int SIZE;  // Rozmiar planszy
     private JButton[][] buttons;  // Tablica przycisków reprezentujących komórki planszy
     private int[][] intBoard;
@@ -81,16 +82,20 @@ public class GameInterface extends JFrame {
         JButton newBoardButton = new JButton("New Board");
         newBoardButton.addActionListener(new NewBoardButtonClickListener());
 
-        // Dodaj przycisk z trzema opcjami
+
         JComboBox<String> difficultyComboBox = new JComboBox<>(new String[]{"Difficulty", "Hard", "Medium", "Easy"});
         difficultyComboBox.addActionListener(new DifficultyComboBoxActionListener());
-        //difficultyComboBox.setRenderer(new DifficultyComboBoxRenderer());
 
-        // Dodaj przycisk do wybierania pliku
+        JLabel sizeLabel = new JLabel("Size: " + SIZE +"x"+ SIZE);
+
+
         JButton fileChooserButton = new JButton("Choose File");
         fileChooserButton.addActionListener(new FileChooserButtonClickListener());
 
-        JLabel sizeLabel = new JLabel("Size: " + SIZE + "x" + SIZE);
+
+
+        JButton myBoardsButton = new JButton("My Boards");
+        myBoardsButton.addActionListener(new MyBoardsButtonClickListener());
 
 
         controlPanel.add(solveButton);
@@ -100,6 +105,7 @@ public class GameInterface extends JFrame {
         controlPanel.add(difficultyComboBox);
         controlPanel.add(sizeLabel);
         controlPanel.add(fileChooserButton);
+        controlPanel.add(myBoardsButton);
 
         return controlPanel;
     }
@@ -117,11 +123,10 @@ public class GameInterface extends JFrame {
             if (result == JFileChooser.APPROVE_OPTION) {
                 File selectedFile = fileChooser.getSelectedFile();
                 String filePath = selectedFile.getAbsolutePath();
-                // Tutaj możesz zaimplementować logikę obsługi wybranego pliku
                 System.out.println("Selected file: " + filePath);
 
                 CSVFileReader reader = new CSVFileReader(filePath, ",");
-                reader.writeCSVFile("src/Pictures", ",");
+                reader.writeCSVFile("src/Pictures/UserBoards/MyBoard"+filesCounter++ +".csv", ",");
 
                 int[][] boardFromFile = reader.intSwapper(reader.toString());
                 SIZE = boardFromFile.length;
@@ -135,10 +140,54 @@ public class GameInterface extends JFrame {
                     System.arraycopy(boardFromFile[i], 0, intBoard[i], 0, SIZE);
                     System.arraycopy(intBoard[i], 0, startingBoard[i], 0, SIZE);
                 }
-                initializeBoard(intBoard);
+                initializeBoard();
             }
         }
     }
+
+    private class MyBoardsButtonClickListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            showMyBoardsDialog();
+        }
+
+        private void showMyBoardsDialog() {
+            JFileChooser fileChooser = new JFileChooser("src/Pictures/UserBoards");
+            fileChooser.setFileFilter(new FileNameExtensionFilter("CSV Files", "csv"));
+            fileChooser.setDialogTitle("Select Board File");
+
+            int result = fileChooser.showOpenDialog(GameInterface.this);
+
+            if (result == JFileChooser.APPROVE_OPTION) {
+                File selectedFile = fileChooser.getSelectedFile();
+                String filePath = selectedFile.getAbsolutePath();
+                // Tutaj możesz zaimplementować logikę obsługi wybranego pliku
+                System.out.println("Selected file: " + filePath);
+
+                // Wczytaj plik .csv i zaktualizuj planszę
+                CSVFileReader reader = new CSVFileReader(filePath, ",");
+                int[][] boardFromFile = reader.intSwapper(reader.toString());
+
+                SIZE = boardFromFile.length;
+                startingBoard = new int[SIZE][SIZE];
+                intBoard = new int[SIZE][SIZE];
+                solvedBoard = new int[SIZE][SIZE];
+                targetSize = 500 / SIZE;
+                initializeBufferedIcons();
+
+                for (int i = 0; i < SIZE; i++) {
+                    System.arraycopy(boardFromFile[i], 0, intBoard[i], 0, SIZE);
+                    System.arraycopy(intBoard[i], 0, startingBoard[i], 0, SIZE);
+                }
+
+                initializeBoard();
+            }
+        }
+    }
+
+
+
+
 
 
     private class DifficultyComboBoxActionListener implements ActionListener {
@@ -147,15 +196,11 @@ public class GameInterface extends JFrame {
             JComboBox<String> comboBox = (JComboBox<String>) e.getSource();
             String selectedDifficulty = (String) comboBox.getSelectedItem();
 
-            // Obsługa wybranej trudności
             if ("Hard".equals(selectedDifficulty)) {
-                // Ustaw rozmiar planszy na trudny (np. 8x8)
                 setSizeAndInitializeBoard(8);
             } else if ("Medium".equals(selectedDifficulty)) {
-                // Ustaw rozmiar planszy na średni (np. 5x5)
                 setSizeAndInitializeBoard(6);
             } else if ("Easy".equals(selectedDifficulty)) {
-                // Ustaw rozmiar planszy na łatwy (np. 4x4)
                 setSizeAndInitializeBoard(4);
             }
 
@@ -178,11 +223,11 @@ public class GameInterface extends JFrame {
                 System.arraycopy(intBoard[i], 0, startingBoard[i], 0, SIZE);
             }
 
-            initializeBoard(intBoard);
+            initializeBoard();
         }
     }
 
-    private void initializeBoard(int[][] board) {
+    private void initializeBoard() {
         // Usunięcie poprzednich komponentów
         getContentPane().removeAll();
         revalidate();
@@ -254,24 +299,16 @@ public class GameInterface extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (checker.IsCorrect(intBoard)) {
-                System.out.println("NAJS");
+                JOptionPane.showMessageDialog(null, "Correct!", "Check", JOptionPane.INFORMATION_MESSAGE);
             } else {
-                System.out.println("NO LIPA");
-            }
-
-            //printuje tablice ze zmmienionymi wartościami
-            for (int i = 0; i < SIZE; i++) {
-                for (int j = 0; j < SIZE; j++) {
-                    System.out.print(intBoard[i][j] + " ");
-                }
-                System.out.println();
+                JOptionPane.showMessageDialog(null, "Incorrect!", "Check", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
 
     private class CellClickListener implements ActionListener {
-        private int row;
-        private int col;
+        private final int row;
+        private final int col;
 
         public CellClickListener(int row, int col) {
             this.row = row;
@@ -362,9 +399,7 @@ public class GameInterface extends JFrame {
             }
         }
         if (x + 1 < size && y - 1 >= 0) {
-            if ((tempBoard[x + 1][y - 1] == -1) && (tempBoard[x + 1][y] == -1) && (tempBoard[x][y - 1] == -1)) {
-                return true;
-            }
+            return (tempBoard[x + 1][y - 1] == -1) && (tempBoard[x + 1][y] == -1) && (tempBoard[x][y - 1] == -1);
         }
         return false;
     }
@@ -440,25 +475,25 @@ public class GameInterface extends JFrame {
         Image scaledImage;
         for (int i = 1; i <= 30; i++) {
             imagePath = "Pictures/" + i + ".jpg";
-            originalIcon = new ImageIcon(getClass().getResource(imagePath));
+            originalIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource(imagePath)));
             originalImage = originalIcon.getImage();
             scaledImage = originalImage.getScaledInstance(targetSize, targetSize, Image.SCALE_SMOOTH);
             bufferedIcons[i] = new ImageIcon(scaledImage);
         }
         imagePath = "Pictures/puste.jpg";
-        originalIcon = new ImageIcon(getClass().getResource(imagePath));
+        originalIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource(imagePath)));
         originalImage = originalIcon.getImage();
         scaledImage = originalImage.getScaledInstance(targetSize, targetSize, Image.SCALE_SMOOTH);
         bufferedIcons[31] = new ImageIcon(scaledImage);
 
         imagePath = "Pictures/x.jpg";
-        originalIcon = new ImageIcon(getClass().getResource(imagePath));
+        originalIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource(imagePath)));
         originalImage = originalIcon.getImage();
         scaledImage = originalImage.getScaledInstance(targetSize, targetSize, Image.SCALE_SMOOTH);
         bufferedIcons[32] = new ImageIcon(scaledImage);
 
         imagePath = "Pictures/zamalowane.jpg";
-        originalIcon = new ImageIcon(getClass().getResource(imagePath));
+        originalIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource(imagePath)));
         originalImage = originalIcon.getImage();
         scaledImage = originalImage.getScaledInstance(targetSize, targetSize, Image.SCALE_SMOOTH);
         bufferedIcons[33] = new ImageIcon(scaledImage);
