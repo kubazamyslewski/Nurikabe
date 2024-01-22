@@ -75,6 +75,10 @@ public class Solver {
         int index;
         int r = board.length - 1;
         int c = r;
+        int rWhite=0;
+        int cWhite=0;
+
+        int whiteIndex;
 
 
         for (int i = 0; i < n; i++) {
@@ -103,9 +107,11 @@ public class Solver {
         r = blackCellsFromBoard.get(index).getR();
         c = blackCellsFromBoard.get(index).getC();
 
-        int whiteIndex = ThreadLocalRandom.current().nextInt(whiteCellsFromBoard.size());
-        int rWhite = whiteCellsFromBoard.get(whiteIndex).getR();
-        int cWhite = whiteCellsFromBoard.get(whiteIndex).getC();
+        if (!whiteCellsFromBoard.isEmpty()) {
+            whiteIndex = ThreadLocalRandom.current().nextInt(whiteCellsFromBoard.size());
+            rWhite = whiteCellsFromBoard.get(whiteIndex).getR();
+            cWhite = whiteCellsFromBoard.get(whiteIndex).getC();
+        }
 
 
         for (int i = -1; i < 2; i++) {
