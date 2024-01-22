@@ -4,7 +4,7 @@ import java.util.Queue;
 
 public class AnalyzeMap {
 
-    //bfs z porownaniem ==
+    //bfs z porownaniem
     private int bfs(int[][] arr, int r, int c, int land) {
         if (r < 0 || r >= arr.length || c < 0 || c >= arr[0].length) {
             return 0;
