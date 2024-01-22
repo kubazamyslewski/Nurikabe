@@ -1,16 +1,7 @@
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.Scanner;
-
 public class Checker {
-    /*
-    -1 to czarne pole
-    numerki to numerki
-    0 to białe pole
-     */
-    public boolean IsCorrect(int[][] board)
-    {
-
+    public boolean IsCorrect(int[][] board) {
         int n= board.length;
         int[][]tempboard = new int[n][n];
         for(int i=0; i<n; ++i)

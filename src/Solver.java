@@ -16,7 +16,6 @@ public class Solver {
             return boardToSolve;
         }
         if (boardState[0] == 1 && boardState[1] == 0 && boardState[2] == 0 && boardState[3] == 0 && boardState[4] == 0) {
-            System.out.println("ESSAAAAAA");
             return boardToSolve;
         }
 

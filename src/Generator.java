@@ -4,10 +4,6 @@ import java.util.*;
 public class Generator {
 
 
-    int generateNumber(int s){
-        Random random = new Random();
-        return random.nextInt(s);
-    }
 
     int [][] generateBoard(int size) {
         int [][]tempBoard = new int [size][size];
@@ -63,12 +59,6 @@ public class Generator {
             if(possDirections.size()>1 && checkpointPlaces.size()< tempBoard.length + tempBoard.length/2){
                 checkpointPlaces.offer((new int[]{currentX,currentY}));
             }
-        }
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                System.out.print(tempBoard[i][j]+" ");
-            }
-            System.out.println();
         }
         return tempBoard;
     }

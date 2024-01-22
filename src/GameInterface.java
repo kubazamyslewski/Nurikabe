@@ -1,9 +1,7 @@
 import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.util.Objects;
 
 public class GameInterface extends JFrame {
@@ -57,13 +55,10 @@ public class GameInterface extends JFrame {
                 JButton button = new JButton();
                 button.setPreferredSize(new Dimension(50, 50));
                 button.addActionListener(new CellClickListener(i, j));
-
                 buttons[i][j] = button;
-
                 if (intBoard[i][j] >= 0) {
                     updateButtonIconOnStart(i, j);
                 }
-
                 buttonPanel.add(button);
             }
         }
@@ -81,22 +76,10 @@ public class GameInterface extends JFrame {
         clearButton.addActionListener(new ClearButtonClickListener());
         JButton newBoardButton = new JButton("New Board");
         newBoardButton.addActionListener(new NewBoardButtonClickListener());
-
-
         JComboBox<String> difficultyComboBox = new JComboBox<>(new String[]{"Difficulty", "Hard", "Medium", "Easy"});
         difficultyComboBox.addActionListener(new DifficultyComboBoxActionListener());
-
-        JLabel sizeLabel = new JLabel("Size: " + SIZE + "x" + SIZE);
-
-
         JButton fileChooserButton = new JButton("Choose File");
         fileChooserButton.addActionListener(new FileChooserButtonClickListener());
-
-
-        //JButton myBoardsButton = new JButton("My Boards");
-        // myBoardsButton.addActionListener(new MyBoardsButtonClickListener());
-
-
         controlPanel.add(solveButton);
         controlPanel.add(checkButton);
         controlPanel.add(clearButton);
@@ -107,7 +90,6 @@ public class GameInterface extends JFrame {
         return controlPanel;
     }
 
-
     private class FileChooserButtonClickListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -115,23 +97,14 @@ public class GameInterface extends JFrame {
             CSVFileReader reader = new CSVFileReader("src/myBoards/" + nazwaPliku + ".csv", ",");
             int[][] boardFromFile = reader.intSwapper(reader.toString());
             SIZE = boardFromFile.length;
-
             intBoard = boardFromFile;
-//            new GameInterface(board);
-
-
-
             startingBoard = new int[SIZE][SIZE];
-
             solvedBoard = new int[SIZE][SIZE];
             targetSize = 500 / SIZE;
             initializeBufferedIcons();
-
             initializeBoard();
         }
     }
-
-
 
 private class DifficultyComboBoxActionListener implements ActionListener {
     @Override
@@ -366,13 +339,10 @@ private class CellClickListener implements ActionListener {
         int level = 0;
         // Obsługa wybranej opcji
         if (selectedOption == 0) {
-            System.out.println("Wybrano poziom trudny");
             level = 3;
         } else if (selectedOption == 1) {
-            System.out.println("Wybrano poziom średni");
             level = 2;
         } else if (selectedOption == 2) {
-            System.out.println("Wybrano poziom łatwy");
             level = 1;
         } else {
             System.out.println("Nie wybrano żadnej opcji");
@@ -398,10 +368,8 @@ private class CellClickListener implements ActionListener {
         int option = 0;
         // Obsługa wybranej opcji
         if (selectedOption == 0) {
-            System.out.println("Generuję planszę");
             option = 1;
         } else if (selectedOption == 1) {
-            System.out.println("Wczytuję planszę");
             option = 2;
         } else {
             System.out.println("Nie wybrano żadnej opcji");

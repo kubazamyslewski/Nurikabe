@@ -1,18 +1,9 @@
 import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
-import java.io.File;
-
 public class Game {
     static int size;
     private static int [][]board;
     public static void main(String[]args){
         whatToDo();
-        for(int i=0; i<size; i++){
-            for(int j=0; j<size; j++){
-                System.out.print(board[i][j] + " ");
-            }
-            System.out.println();
-        }
     }
 
     static void whatToDo(){
@@ -44,6 +35,4 @@ public class Game {
         }
         return 0;
     }
-
-
 }
