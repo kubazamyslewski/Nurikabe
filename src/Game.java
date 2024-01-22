@@ -39,8 +39,9 @@ public class Game {
                     CSVFileReader reader = new CSVFileReader(filePath, ",");
                     reader.writeCSVFile("src/Pictures/UserBoards/MyBoard.csv", ",");
                     board = reader.intSwapper(reader.toString());
+                    new GameInterface(board);
                 }
-                new GameInterface(board);
+
                 break;
             default: System.out.println("Źle wybrany numer");
         }
