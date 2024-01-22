@@ -1,8 +1,6 @@
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Game {
     static int size;
@@ -46,28 +44,7 @@ public class Game {
             default: System.out.println("Źle wybrany numer");
         }
     }
-    static int[][] intSwapper (String inputString) {
-        String[] rows = inputString.split("[\\n\\r]+");
-        List<int[]> resultArrayList = new ArrayList<>();
-        for (String row : rows) {
-            String[] numbersStr = row.trim().split("[,\\s]+");
-            List<Integer> rowList = new ArrayList<>();
-            for (String numStr : numbersStr) {
-                try {
-                    int num = Integer.parseInt(numStr);
-                    rowList.add(num);
-                } catch (NumberFormatException e) {
-                }
-            }
-            int[] rowArray = new int[rowList.size()];
-            for (int i = 0; i < rowList.size(); i++) {
-                rowArray[i] = rowList.get(i);
-            }
-            resultArrayList.add(rowArray);
-        }
-        int[][] resultArray = resultArrayList.toArray(new int[0][]);
-        return resultArray;
-    }
+
     static int difficultyLevel(){
         switch(GameInterface.selectDifficulty()){
             case 1: return 4;
@@ -78,10 +55,5 @@ public class Game {
         return 0;
     }
 
-    static void giveBoard(){
-        Generator generator = new Generator();
-        int[][] playableBoard = generator.makeBoardToPlay(generator.generateBoard(size));
-        board = playableBoard;
-    }
 
 }
