@@ -10,7 +10,6 @@ public class GameInterface extends JFrame {
     private JButton[][] buttons;  // Tablica przycisków reprezentujących komórki planszy
     private int[][] intBoard;
     private int[][] solvedBoard;
-    private int[][] startingBoard;
     Solver solver = new Solver();
     Checker checker = new Checker();
     Generator generator = new Generator();
@@ -21,10 +20,6 @@ public class GameInterface extends JFrame {
         this.intBoard = intBoard;
         this.SIZE = intBoard.length;
         this.targetSize = 500 / SIZE;
-        this.startingBoard = new int[SIZE][SIZE];
-        for (int i = 0; i < SIZE; i++) {
-            System.arraycopy(intBoard[i], 0, startingBoard[i], 0, SIZE);
-        }
         initializeBufferedIcons();
 
         setTitle("Gra Nurikabe");
@@ -49,7 +44,7 @@ public class GameInterface extends JFrame {
         JPanel buttonPanel = new JPanel(new GridLayout(SIZE, SIZE));
         buttonPanel.setPreferredSize(new Dimension(SIZE * targetSize, SIZE * targetSize));
         buttons = new JButton[SIZE][SIZE];
-
+        System.out.println(SIZE);
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
                 JButton button = new JButton();
@@ -98,7 +93,6 @@ public class GameInterface extends JFrame {
             int[][] boardFromFile = reader.intSwapper(reader.toString());
             SIZE = boardFromFile.length;
             intBoard = boardFromFile;
-            startingBoard = new int[SIZE][SIZE];
             solvedBoard = new int[SIZE][SIZE];
             targetSize = 500 / SIZE;
             initializeBufferedIcons();
@@ -130,13 +124,11 @@ private class DifficultyComboBoxActionListener implements ActionListener {
         initializeBufferedIcons();
 
         // Ponowna inicjalizacja planszy
-        startingBoard = new int[SIZE][SIZE];
         intBoard = new int[SIZE][SIZE];
         solvedBoard = new int[SIZE][SIZE];
         int[][] generated = generator.generateBoard(SIZE);
         for (int i = 0; i < SIZE; i++) {
             System.arraycopy(generator.makeBoardToPlay(generated)[i], 0, intBoard[i], 0, SIZE);
-            System.arraycopy(intBoard[i], 0, startingBoard[i], 0, SIZE);
         }
 
         initializeBoard();
