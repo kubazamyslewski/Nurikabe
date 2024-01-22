@@ -38,8 +38,7 @@ public class GameInterface extends JFrame {
         add(controlPanel, BorderLayout.NORTH);
 
         JPanel buttonPanel = createButtonPanel();
-        add(buttonPanel, BorderLayout.CENTER);
-
+        add(buttonPanel, BorderLayout.SOUTH);
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
@@ -72,6 +71,7 @@ public class GameInterface extends JFrame {
 
     private JPanel createControlPanel() {
         JPanel controlPanel = new JPanel();
+        controlPanel.setPreferredSize(new Dimension(50,75));
         JButton solveButton = new JButton("Solve");
         solveButton.addActionListener(new SolveButtonClickListener());
         JButton checkButton = new JButton("Check");
@@ -90,11 +90,15 @@ public class GameInterface extends JFrame {
         JButton fileChooserButton = new JButton("Choose File");
         fileChooserButton.addActionListener(new FileChooserButtonClickListener());
 
+        JLabel sizeLabel = new JLabel(SIZE + "x" + SIZE);
+
+
         controlPanel.add(solveButton);
         controlPanel.add(checkButton);
         controlPanel.add(clearButton);
         controlPanel.add(newBoardButton);
         controlPanel.add(difficultyComboBox);
+        controlPanel.add(sizeLabel);
         controlPanel.add(fileChooserButton);
 
         return controlPanel;
@@ -117,6 +121,7 @@ public class GameInterface extends JFrame {
                 System.out.println("Selected file: " + filePath);
 
                 CSVFileReader reader = new CSVFileReader(filePath, ",");
+                reader.writeCSVFile("src/Pictures", ",");
 
                 int[][] boardFromFile = reader.intSwapper(reader.toString());
                 SIZE = boardFromFile.length;
@@ -232,7 +237,7 @@ public class GameInterface extends JFrame {
     private class SolveButtonClickListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            solvedBoard = solver.solve(intBoard, 500_000, 0);
+            solvedBoard = solver.solve(intBoard, 10_000, 0);
             for (int i = 0; i < SIZE; i++) {
                 System.arraycopy(solvedBoard[i], 0, intBoard[i], 0, SIZE);
             }
@@ -260,25 +265,6 @@ public class GameInterface extends JFrame {
                     System.out.print(intBoard[i][j] + " ");
                 }
                 System.out.println();
-            }
-        }
-    }
-
-    private void initializeButtons() {
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE; j++) {
-                JButton button = new JButton();
-                button.setPreferredSize(new Dimension(50, 50));
-                button.addActionListener(new CellClickListener(i, j));
-
-                buttons[i][j] = button;
-
-                if (intBoard[i][j] >= 0) {
-                    updateButtonIconOnStart(i, j);
-                }
-
-                //button.doClick(0);    // <- zabawny item
-                add(button);
             }
         }
     }

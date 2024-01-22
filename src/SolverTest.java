@@ -9,7 +9,7 @@ class SolverTest {
         Solver solver = new Solver();
         Generator gen = new Generator();
         int[][] boardToSolve = gen.makeBoardToPlay(gen.generateBoard(5));
-        int[][] solvedBoard = solver.solve(boardToSolve, 500000, 0);
+        int[][] solvedBoard = solver.solve(boardToSolve, 10000, 0);
         Checker ch = new Checker();
         assertTrue(ch.IsCorrect(solvedBoard));
     }
@@ -18,7 +18,7 @@ class SolverTest {
             Solver solver = new Solver();
             Generator gen= new Generator();
             int[][] boardToSolve =gen.makeBoardToPlay(gen.generateBoard(7));
-            int[][] solvedBoard = solver.solve(boardToSolve, 500000, 0);
+            int[][] solvedBoard = solver.solve(boardToSolve, 10000, 0);
             Checker ch = new Checker();
            assertTrue(ch.IsCorrect(solvedBoard));
     }
@@ -27,7 +27,7 @@ class SolverTest {
             Solver solver = new Solver();
             Generator gen= new Generator();
             int[][] boardToSolve =gen.makeBoardToPlay(gen.generateBoard(10));
-            int[][] solvedBoard = solver.solve(boardToSolve, 500000, 0);
+            int[][] solvedBoard = solver.solve(boardToSolve, 50000, 0);
             Checker ch = new Checker();
             assertTrue(ch.IsCorrect(solvedBoard));
     }

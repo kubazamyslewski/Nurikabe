@@ -7,7 +7,6 @@ public class Solver {
     public int[][] solve(int[][] boardToSolve, int k, int kCount) {
         int[][] board = copyBoard(boardToSolve);
         int[][] bestNeighbour;
-        int[] win = {1, 0, 0, 0};
         int[] boardState = findBoardState(board);
         int currentSumState = sumState(boardState);
         int neighbourSumState;
@@ -47,31 +46,29 @@ public class Solver {
     }
 
 
-    int[][] findBestBoard(ArrayList<NurikabeBoard> boards) {
-        int[][] bestNeighbour;
-        int[][] possibleBest = boards.get(0).getBoard();
+    int[][] findBestBoard(ArrayList<int[][]> boards) {
+        int[][] possibleBest = boards.get(0);
         int currentBestSumState = sumState(findBoardState(possibleBest));
         int possibleBestSumState;
         int bestBoardIndex = 0;
         for (int i = 1; i < boards.size(); i++) {
-            possibleBestSumState = sumState(findBoardState(boards.get(i).getBoard()));
+            possibleBestSumState = sumState(findBoardState(boards.get(i)));
             if (possibleBestSumState < currentBestSumState) {
                 currentBestSumState = possibleBestSumState;
                 bestBoardIndex = i;
             }
         }
 
-        return boards.get(bestBoardIndex).getBoard();
+        return boards.get(bestBoardIndex);
     }
 
 
-    public ArrayList<NurikabeBoard> findNeighbourBoards(int[][] board) {
-        //Random random = new Random();
+    public ArrayList<int[][]> findNeighbourBoards(int[][] board) {
         int n = board.length;
         int m = board[0].length;
-        ArrayList<int[][]> neighbourBoards = new ArrayList<>();
-        ArrayList<NurikabeBoard> tempNurikabeboard = new ArrayList<>();
-        ArrayList<Pair> blackCells;
+
+        ArrayList<int[][]> boards = new ArrayList<>();
+
         ArrayList<Pair> blackCellsFromBoard = new ArrayList<>();
         ArrayList<Pair> whiteCellsFromBoard = new ArrayList<>();
 
@@ -90,21 +87,26 @@ public class Solver {
             }
         }
 
-        //nie zadziala caly solver jesli to beda zera i jesli wczesniej nie bylo ani jednej -1
-        while (blackCellsFromBoard.isEmpty()) {
+        while (blackCellsFromBoard.isEmpty() || blackCellsFromBoard.size() < board.length-1) {
             if (board[r][c] == 0) {
                 board[r][c] = -1;
-                //blackCells.add(new Pair(r, c));
                 blackCellsFromBoard.add(new Pair(r, c));
-                //nurikabeBoard.addBlackCells(new Pair(r,c));
             }
-            r--;
-            c--;
+            if (r<=c){
+                c--;
+            }else {
+                r--;
+            }
         }
+//        while (blackCellsFromBoard.isEmpty()) {
+//            if (board[r][c] == 0) {
+//                board[r][c] = -1;
+//                blackCellsFromBoard.add(new Pair(r, c));
+//            }
+//            r--;
+//            c--;
+//        }
 
-        NurikabeBoard nurikabeBoard = new NurikabeBoard(board, blackCellsFromBoard);
-
-        Pair blackCell;
 
         index = ThreadLocalRandom.current().nextInt(blackCellsFromBoard.size());
         r = blackCellsFromBoard.get(index).getR();
@@ -119,57 +121,43 @@ public class Solver {
             for (int j = -1; j < 2; j++) {
                 if (isValid(board, r + i, c + j)) {
                     int[][] tempBoard = copyBoard(board);
-                    blackCells = new ArrayList<>(blackCellsFromBoard);
-                    blackCell = new Pair(r + i, c + j);
 
                     if (board[r + i][c + j] == -1) {
                         tempBoard[r + i][c + j] = 0;
-                        blackCells.remove(blackCell);
-                        neighbourBoards.add(tempBoard);
-                        tempNurikabeboard.add(new NurikabeBoard(tempBoard, blackCells));
+                        boards.add(tempBoard);
 
                     } else if (board[r + i][c + j] == 0) {
-                        blackCells.add(blackCell);
-                        //whiteCells.remove(whiteCell);
                         tempBoard[r + i][c + j] = -1;
-                        neighbourBoards.add(tempBoard);
-                        tempNurikabeboard.add(new NurikabeBoard(tempBoard, blackCells));
+                        boards.add(tempBoard);
                     }
 
                 }
                 if (isValid(board, rWhite + i, cWhite + j)) {
                     int[][] tempBoard = copyBoard(board);
-                    blackCells = new ArrayList<>(blackCellsFromBoard);
-                    blackCell = new Pair(rWhite + i, cWhite + j);
                     if (board[rWhite + i][cWhite + j] == -1) {
                         tempBoard[rWhite + i][cWhite + j] = 0;
-                        blackCells.remove(blackCell);
-                        neighbourBoards.add(tempBoard);
-                        tempNurikabeboard.add(new NurikabeBoard(tempBoard, blackCells));
+                        boards.add(tempBoard);
 
                     } else if (board[rWhite + i][cWhite + j] == 0) {
-                        blackCells.add(blackCell);
                         tempBoard[rWhite + i][cWhite + j] = -1;
-                        neighbourBoards.add(tempBoard);
-                        tempNurikabeboard.add(new NurikabeBoard(tempBoard, blackCells));
+                        boards.add(tempBoard);
                     }
 
                 }
             }
         }
-        return tempNurikabeboard;
+        return boards;
     }
 
 
     public int[] findBoardState(int[][] board) {
-        int x = 0; //ilosc jezior czaarnych
-        int y = 0; //roznica wielkosci jezior dla cyfr a wartości tych cyfr
-        int z = 0; //ilosc kwadratow
-        int w = 0; //rożnica (ilosc bialych i cyfrowych jezior) a numberIslands.size
-        int a = 0; //ilosc polaczonych cyfr ze soba
+        int x; //ilosc jezior czaarnych
+        int y; //roznica wielkosci jezior dla cyfr a wartości tych cyfr
+        int z; //ilosc kwadratow
+        int w; //rożnica (ilosc bialych i cyfrowych jezior) a numberIslands.size
+        int a; //ilosc polaczonych cyfr ze soba
         int[] result = new int[5];
-        ArrayList<NumberIsland> numberIslands = new ArrayList<>();
-        ArrayList<Integer> blackIslands;
+        ArrayList<NumberIsland> numberIslands;
 
         AnalyzeMap analyzeMap = new AnalyzeMap();
         numberIslands = analyzeMap.findNumberIslands(board);
@@ -199,26 +187,23 @@ public class Solver {
         NumberIsland currentNumberIsland;
 
 
-        for (int i = 0; i < numberIslands.size(); i++) {
-            currentNumberIsland = numberIslands.get(i);
+        for (NumberIsland numberIsland : numberIslands) {
+            currentNumberIsland = numberIsland;
             difference += Math.abs(currentNumberIsland.getNumber() - currentNumberIsland.getArea());
         }
         return difference;
     }
+
     public boolean isValid(int[][] board, int r, int c) {
-        if (r < 0 || r >= board.length || c < 0 || c >= board[0].length) {
-            return false;
-        }
-        return true;
+        return r >= 0 && r < board.length && c >= 0 && c < board[0].length;
     }
+
     public int[][] copyBoard(int[][] toCopy) {
         int n = toCopy.length;
         int m = toCopy[0].length;
         int[][] newBoard = new int[n][m];
         for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                newBoard[i][j] = toCopy[i][j];
-            }
+            System.arraycopy(toCopy[i], 0, newBoard[i], 0, m);
         }
         return newBoard;
     }

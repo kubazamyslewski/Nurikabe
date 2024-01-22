@@ -1,14 +1,9 @@
 
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.Stack;
+import java.util.*;
 
 public class Generator {
-    private int x;
-    private int y;
-    private int size;
+
     private int [][]board;
-    private int [][] boardToPlay;
 
     int generateNumber(int s){
         Random random = new Random();
@@ -25,71 +20,95 @@ public class Generator {
         }
 
         Random random = new Random();
-        int currentX = random.nextInt(size);
-        int currentY = random.nextInt(size);
+//        int currentX = random.nextInt(size);
+//        int currentY = random.nextInt(size);
+        int currentX = 2;
+        int currentY = 2;
         int counter = 1;
         tempBoard[currentX][currentY] = -1;
 
-
-        Stack<ArrayList<Integer>> checkpointDirections = new Stack<>();
-        Stack<Integer> checkpointPlace = new Stack<>();
-        ArrayList<Integer> directions;
+        //ArrayList<int[]> checkpointPlaces = new ArrayList<>();
+        Queue<int[]> checkpointPlaces = new ArrayDeque<>();
+        int[] checkpoint = new int[]{currentX, currentY};
+        checkpointPlaces.add(checkpoint);
+        ArrayList<Integer> possDirections = possibleDirection(tempBoard, currentX, currentY);
+        int direction = 0;
 
         while(counter<0.7*size*size){
-            int direction = random.nextInt(4);
-            if (isInbounds(tempBoard, currentX, currentY) && !isItSquare(tempBoard,currentX,currentY)) {
-                if (tempBoard[currentX][currentY] == 0) {
-                    tempBoard[currentX][currentY] = -1;
-                    counter++;
-                }
+            possDirections = possibleDirection(tempBoard, currentX, currentY);
+
+            while(possDirections.isEmpty() && !checkpointPlaces.isEmpty()){
+                //checkpoint = checkpointPlaces.remove(random.nextInt(checkpointPlaces.size()));
+                checkpoint = checkpointPlaces.poll();
+                currentX = checkpoint[0];
+                currentY = checkpoint[1];
+                possDirections = possibleDirection(tempBoard, currentX, currentY);
             }
-
-            directions = possibleDirection(tempBoard, currentX, currentY);
-
-
-            if (directions.isEmpty() && !checkpointDirections.isEmpty()) {
-                currentY = checkpointPlace.pop();
-                currentX = checkpointPlace.pop();
-                directions = checkpointDirections.removeLast();
-            } else if (directions.isEmpty() && checkpointDirections.isEmpty()) {
+            if(!possDirections.isEmpty()){
+                direction = possDirections.get(random.nextInt(possDirections.size()));
+                switch(direction){
+                    case 0:
+                        currentX--;
+                        break;
+                    case 1:
+                        currentY++;
+                        break;
+                    case 2:
+                        currentX++;
+                        break;
+                    case 3:
+                        currentY--;
+                        break;
+                }
+                tempBoard[currentX][currentY]=-1;
+                //checkpointPlaces.offer((new int[]{currentX,currentY}));
+                counter++;
+            }else{
                 break;
             }
-
-            direction = directions.get(random.nextInt(directions.size()));
-
-            //if possible directions more than 1 then save as checkpoint
-            if (directions.size() > 2) {
-                directions.remove(directions.indexOf(direction));
-                checkpointDirections.push(directions);
-                checkpointPlace.push(currentX);
-                checkpointPlace.push(currentY);
+            if(possDirections.size()>1){
+                checkpointPlaces.offer((new int[]{currentX,currentY}));
             }
 
-            switch(direction){
-                case 0:
-                    currentX--;
-                    break;
-                case 1:
-                    currentY++;
-                    break;
-                case 2:
-                    currentX++;
-                    break;
-                case 3:
-                    currentY--;
-                    break;
+
+//            if (isInbounds(tempBoard, currentX, currentY) && !isItSquare(tempBoard,currentX,currentY)) {
+//                if (tempBoard[currentX][currentY] == 0) {
+//                    tempBoard[currentX][currentY] = -1;
+//                    counter++;
+//                    checkpoint = new int[]{currentX, currentY};
+//                    checkpointPlaces.add(checkpoint);
+//                }
+//            }
+
+//            switch(direction){
+//                case 0:
+//                    currentX--;
+//                    break;
+//                case 1:
+//                    currentY++;
+//                    break;
+//                case 2:
+//                    currentX++;
+//                    break;
+//                case 3:
+//                    currentY--;
+//                    break;
+//            }
+        }
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                System.out.print(tempBoard[i][j]+" ");
             }
+            System.out.println();
         }
         return tempBoard;
     }
     int[][] makeBoardToPlay(int[][] board){
         int n = board.length;
         int m = board[0].length;
-        int iteration = 0;
         Cell current;
         int[][] tempBoard = new int[n][m];
-        ArrayList<NumberCell> numberCells = new ArrayList<>();
-        ArrayList<Cell> cells = new ArrayList<>();
+        ArrayList<Cell> cells;
 
         AnalyzeMap analyzeBoard = new AnalyzeMap();
         cells = (analyzeBoard.findWhiteLakes(board));
@@ -102,9 +121,7 @@ public class Generator {
                         tempBoard[i][j] = current.getSize();
                         cells.removeFirst();
                     }
-
                 }
-
             }
         }
         return tempBoard;
