@@ -82,7 +82,7 @@ public class GameInterface extends JFrame {
         newBoardButton.addActionListener(new NewBoardButtonClickListener());
 
         // Dodaj przycisk z trzema opcjami
-        JComboBox<String> difficultyComboBox = new JComboBox<>(new String[]{"Hard", "Medium", "Easy"});
+        JComboBox<String> difficultyComboBox = new JComboBox<>(new String[]{"Difficulty", "Hard", "Medium", "Easy"});
         difficultyComboBox.addActionListener(new DifficultyComboBoxActionListener());
         //difficultyComboBox.setRenderer(new DifficultyComboBoxRenderer());
 
@@ -90,7 +90,7 @@ public class GameInterface extends JFrame {
         JButton fileChooserButton = new JButton("Choose File");
         fileChooserButton.addActionListener(new FileChooserButtonClickListener());
 
-        JLabel sizeLabel = new JLabel(SIZE + "x" + SIZE);
+        JLabel sizeLabel = new JLabel("Size: " + SIZE + "x" + SIZE);
 
 
         controlPanel.add(solveButton);

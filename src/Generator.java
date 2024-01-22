@@ -66,7 +66,7 @@ public class Generator {
             }else{
                 break;
             }
-            if(possDirections.size()>1){
+            if(possDirections.size()>1 && checkpointPlaces.size()< tempBoard.length){
                 checkpointPlaces.offer((new int[]{currentX,currentY}));
             }
 

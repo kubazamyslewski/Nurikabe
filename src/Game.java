@@ -1,3 +1,6 @@
+import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,12 +23,23 @@ public class Game {
                 size = difficultyLevel();
                 Generator generator = new Generator();
                 board = generator.makeBoardToPlay(generator.generateBoard(size));
-                GameInterface GUI = new GameInterface(board);
+                new GameInterface(board);
                 break;
             case 2:
-                CSVFileReader reader = new CSVFileReader("src/ExampleFile.csv", ",");
-                board= reader.intSwapper(reader.toString());
-                GameInterface GUIi = new GameInterface(board);
+                JFileChooser fileChooser = new JFileChooser();
+                FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV Files", "csv");
+                fileChooser.setFileFilter(filter);
+
+                int result = fileChooser.showOpenDialog(JFrame.getFrames()[0]);
+
+                if (result == JFileChooser.APPROVE_OPTION) {
+                    File selectedFile = fileChooser.getSelectedFile();
+                    String filePath = selectedFile.getAbsolutePath();
+                    System.out.println("Selected file: " + filePath);
+                    CSVFileReader reader = new CSVFileReader(filePath, ",");
+                    board = reader.intSwapper(reader.toString());
+                }
+                new GameInterface(board);
                 break;
             default: System.out.println("Źle wybrany numer");
         }
