@@ -237,7 +237,7 @@ public class GameInterface extends JFrame {
     private class SolveButtonClickListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            solvedBoard = solver.solve(intBoard, 10_000, 0);
+            solvedBoard = solver.solve(intBoard, 50_000, 0);
             for (int i = 0; i < SIZE; i++) {
                 System.arraycopy(solvedBoard[i], 0, intBoard[i], 0, SIZE);
             }
