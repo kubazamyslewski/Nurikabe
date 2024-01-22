@@ -35,7 +35,7 @@ public class Game {
                     String filePath = selectedFile.getAbsolutePath();
                     System.out.println("Selected file: " + filePath);
                     CSVFileReader reader = new CSVFileReader(filePath, ",");
-                    reader.writeCSVFile("src/Pictures/UserBoards/MyBoard.csv", ",");
+                    //reader.writeCSVFile("src/Pictures/UserBoards/MyBoard.csv", ",");
                     board = reader.intSwapper(reader.toString());
                     new GameInterface(board);
                 }
