@@ -43,18 +43,59 @@ public class Checker {
             }
         }
         //sprawdzanie czy czarna linia jest spójna
+        boolean flag=false;
         for(int i=0; i<n; ++i)
         {
+            if(flag) break;
             for(int j=0; j<n; ++j)
             {
+                if (flag) break;
                 if(tempboard[i][j]==-1)
                 {
-                    boolean p1=false, p2=false, p3=false, p4=false;
-                    if (i > 0 && tempboard[i-1][j]==-1) p1=true;
-                    if (j > 0 && tempboard[i][j-1]==-1) p2=true;
-                    if (i < n-1 && tempboard[i+1][j]==-1) p3=true;
-                    if (j < n-1 && tempboard[i][j+1]==-1) p4=true;
-                    if(!(p1||p2||p3||p4)) return false;
+                    flag = true;
+                    Queue<Punkt> q1 =new LinkedList<>();
+                    boolean[][] odw1 = new boolean[n][n];
+                    q1.add(new Punkt(i, j));
+                    int wyn=0;
+                    odw1[i][j]=true;
+                    while(!q1.isEmpty())
+                    {
+                        ++wyn;
+                        Punkt p=q1.remove();
+                        odw1[p.first][p.second]=true;
+                        if(p.first>0)
+                        {
+                            if(tempboard[p.first-1][p.second] == -1 && !odw1[p.first - 1][p.second]){
+                                q1.add(new Punkt(p.first-1, p.second));
+                                odw1[p.first-1][p.second]=true;
+                            }
+
+                        }
+                        if(p.second>0)
+                        {
+                            if(tempboard[p.first][p.second-1] == -1 && !odw1[p.first][p.second-1]){
+                                q1.add(new Punkt(p.first, p.second-1));
+                                odw1[p.first][p.second-1] =true;
+                            }
+
+                        }
+                        if(p.first<n-1)
+                        {
+                            if(tempboard[p.first+1][p.second] == -1 && !odw1[p.first+1][p.second]) {
+                                q1.add(new Punkt(p.first + 1, p.second));
+                                odw1[p.first+1][p.second]=true;
+                            }
+                        }
+                        if(p.second<n-1)
+                        {
+                            if(tempboard[p.first][p.second+1] == -1 && !odw1[p.first][p.second+1]) {
+                                odw1[p.first][p.second+1]=true;
+                                q1.add(new Punkt(p.first, p.second + 1));
+                            }
+                        }
+
+                    }
+                    if(wyn!= sumofblack) return false;
                 }
             }
         }
