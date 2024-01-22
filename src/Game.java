@@ -23,25 +23,15 @@ public class Game {
                 board = generator.makeBoardToPlay(generator.generateBoard(size));
                 new GameInterface(board);
                 break;
-            case 2:
-                JFileChooser fileChooser = new JFileChooser();
-                FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV Files", "csv");
-                fileChooser.setFileFilter(filter);
-
-                int result = fileChooser.showOpenDialog(JFrame.getFrames()[0]);
-
-                if (result == JFileChooser.APPROVE_OPTION) {
-                    File selectedFile = fileChooser.getSelectedFile();
-                    String filePath = selectedFile.getAbsolutePath();
-                    System.out.println("Selected file: " + filePath);
-                    CSVFileReader reader = new CSVFileReader(filePath, ",");
-                    //reader.writeCSVFile("src/Pictures/UserBoards/MyBoard.csv", ",");
-                    board = reader.intSwapper(reader.toString());
-                    new GameInterface(board);
-                }
-
+            case 2: {
+                String nazwaPliku = JOptionPane.showInputDialog("Name of your file:");
+                CSVFileReader reader = new CSVFileReader("src/myBoards/" + nazwaPliku + ".csv", ",");
+                board = reader.intSwapper(reader.toString());
+                new GameInterface(board);
                 break;
-            default: System.out.println("Źle wybrany numer");
+            }
+            default:
+                System.out.println("Źle wybrany numer");
         }
     }
 
