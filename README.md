@@ -1,3 +1,3 @@
 #Nurikabe
 
-My implementation of Nurikabe made for academic project
+Implementation of Nurikabe made in a 4-person group
